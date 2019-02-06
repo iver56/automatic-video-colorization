@@ -19,6 +19,10 @@ from loss import AdversarialLoss, StyleLoss, PerceptualLoss
 import torch.backends.cudnn as cudnn
 import torchvision.transforms as transforms
 
+
+os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+
+
 # Training settings
 parser = argparse.ArgumentParser(description='pix2pix-PyTorch-implementation')
 parser.add_argument('--dataset', required=True, help='facades')
@@ -54,7 +58,7 @@ if opt.cuda:
     torch.cuda.manual_seed(opt.seed)
 
 print('===> Loading datasets')
-root_path = "/home/paperspace/Desktop/Colorization/DBZ_Dataset"
+root_path = "/work/research/git/Temporal-Anime/dataset/"
 train_set = get_training_set(join(root_path , opt.dataset))
 test_set = get_test_set(join(root_path , opt.dataset))
 
@@ -243,12 +247,14 @@ def log_train_data(loginfo):
 def test():
     avg_psnr = 0
     for batch in testing_data_loader:
-        input, target = Variable(batch[0], volatile=True), Variable(batch[1], volatile=True)
+        input, target, prev_frame = Variable(batch[0], volatile=True), Variable(batch[1], volatile=True), Variable(batch[2], volatile=True)
         if opt.cuda:
             input = input.cuda()
             target = target.cuda()
-
-        prediction = netG(input)
+            prev_frame = prev_frame.cuda()
+        pred_input = torch.cat((input,prev_frame),1)
+        prediction = netG(pred_input)
+        #prediction = netG(input)
         mse = criterionMSE(prediction, target)
         psnr = 10 * log10(1 / mse.data[0])
         avg_psnr += psnr
@@ -258,27 +264,28 @@ def test():
 def checkpoint(epoch):
     if not os.path.exists("checkpoint"):
         os.mkdir("checkpoint")
-    if not os.path.exists(os.path.join("checkpoint", opt.dataset + "_temp_LA")):
-        os.mkdir(os.path.join("checkpoint", opt.dataset + "_temp_LA"))
-    #net_g_model_out_path = "checkpoint/{}/netG_model_epoch_{}.pth".format(opt.dataset, epoch)
-    #net_d_model_out_path = "checkpoint/{}/netD_model_epoch_{}.pth".format(opt.dataset, epoch)
-    model_out_path = "checkpoint/{}/net_model_epoch_{}.pth".format(opt.dataset+"_temp_LA", epoch)
-    #torch.save(netG, net_g_model_out_path)
+    if not os.path.exists(os.path.join("checkpoint", opt.dataset)):
+        os.mkdir(os.path.join("checkpoint", opt.dataset))
+    net_g_model_out_path = "checkpoint/{}/netG_weights_epoch_{}.pth".format(opt.dataset, epoch)
+    net_d_model_out_path = "checkpoint/{}/netD_weights_epoch_{}.pth".format(opt.dataset, epoch)
+    #model_out_path = "checkpoint/{}/net_model_epoch_{}.pth".format(opt.dataset+"_temp_LA", epoch)
+    torch.save({'generator': netG.state_dict()}, net_g_model_out_path)
+    torch.save({'discriminator': netD.state_dict()}, net_d_model_out_path)
     #torch.save(netD, net_d_model_out_path)
+    '''
     torch.save({'netG_state_dict': netG.state_dict(),
                 'netD_state_dict': netD.state_dict(),
                 'optimizerG_state_dict': optimizerG.state_dict(),
                 'optimizerD_state_dict': optimizerD.state_dict(),
                 'epoch': epoch,
                 },model_out_path)
-
+    '''
     print("Checkpoint saved to {}".format("checkpoint" + opt.dataset))
 
 for epoch in range(1, opt.nEpochs + 1):
     train(epoch)
-    test()
-    if epoch % 5 == 0:
-        checkpoint(epoch)
+    #test()
+    checkpoint(epoch)
 
 
 def run():
