@@ -1,4 +1,5 @@
 from __future__ import print_function
+from PIL import Image
 import argparse
 import os
 
@@ -18,7 +19,8 @@ print(opt)
 
 netG = torch.load(opt.model)
 
-image_dir = "dataset/{}/test/a/".format(opt.dataset)
+#image_dir = "dataset/{}/test/a/".format(opt.dataset)
+image_dir = "/work/research/git/Temporal-Anime/dataset/Temporal/Val/"
 image_filenames = [x for x in os.listdir(image_dir) if is_image_file(x)]
 
 transform_list = [transforms.ToTensor(),
@@ -26,16 +28,22 @@ transform_list = [transforms.ToTensor(),
 
 transform = transforms.Compose(transform_list)
 
+#first previous frame needs to be zero image
+initial = Image.new("RGB",[256,256])
+previous = Variable(initial,volatile = True).view(1,-1,256,256)
+previous.cuda()
+
 for image_name in image_filenames:
     img = load_img(image_dir + image_name)
     img = transform(img)
     input = Variable(img, volatile=True).view(1, -1, 256, 256)
-
     if opt.cuda:
         netG = netG.cuda()
         input = input.cuda()
-
-    out = netG(input)
+        #previous = previous.cuda()
+    gen_input = torch.cat((input,previous),1)
+    out = netG(gen_input)
+    previous = out
     out = out.cpu()
     out_img = out.data[0]
     if not os.path.exists(os.path.join("result", opt.dataset)):
