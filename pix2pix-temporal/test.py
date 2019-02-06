@@ -26,7 +26,7 @@ netG.load_state_dict(checkpoint['generator'])
 
 #image_dir = "dataset/{}/test/a/".format(opt.dataset)
 image_dir = "/home/paperspace/Desktop/Colorization/DBZ_Dataset/{}/Val/".format(opt.dataset)
-image_filenames = [x for x in os.listdir(image_dir) if is_image_file(x)]
+image_filenames = [x for x in sorted(os.listdir(image_dir)) if is_image_file(x)]
 
 transform_list = [transforms.ToTensor(),
                   transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]
