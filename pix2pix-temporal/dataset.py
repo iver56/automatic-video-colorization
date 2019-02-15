@@ -29,7 +29,7 @@ class DatasetFromFolder(data.Dataset):
             target = load_img(target_path)
             input = color.rgb2gray(target)
             #needed for lineart only not grayscale
-            input = feature.canny(input,sigma = 2)
+            input = feature.canny(input,sigma = 1)
             input = util.invert(input)
             input = Image.fromarray(np.uint8(input)*255)
             #input = Image.fromarray(input)

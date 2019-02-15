@@ -28,7 +28,7 @@ parser = argparse.ArgumentParser(description='pix2pix-PyTorch-implementation')
 parser.add_argument('--dataset', required=True, help='facades')
 parser.add_argument('--logfile', required=False, help='trainlogs.dat')
 parser.add_argument('--checkpoint', required=False, help='load pre-trained?')
-parser.add_argument('--batchSize', type=int, default=8, help='training batch size')
+parser.add_argument('--batchSize', type=int, default=16, help='training batch size')
 parser.add_argument('--testBatchSize', type=int, default=1, help='testing batch size')
 parser.add_argument('--nEpochs', type=int, default=50, help='number of epochs to train for')
 parser.add_argument('--input_nc', type=int, default=1, help='input image channels')
@@ -58,7 +58,7 @@ if opt.cuda:
     torch.cuda.manual_seed(opt.seed)
 
 print('===> Loading datasets')
-root_path = "/work/research/git/Temporal-Anime/dataset/"
+root_path = "/home/paperspace/Desktop/Temporal-Anime"
 train_set = get_training_set(join(root_path , opt.dataset))
 test_set = get_test_set(join(root_path , opt.dataset))
 
@@ -70,6 +70,11 @@ sample_iterator = create_iterator(6, test_set)
 print('===> Building model')
 netG = define_G(opt.input_nc, opt.output_nc, opt.ngf, False, [0])
 netD = define_D(opt.input_nc + opt.output_nc, opt.ndf, False, [0])
+
+checkpoint_G = torch.load("/home/paperspace/Desktop/Temporal-Anime/pix2pix-temporal/checkpoint/Temporal/netG_GS_weights_epoch_23.pth")
+checkpoint_D = torch.load("/home/paperspace/Desktop/Temporal-Anime/pix2pix-temporal/checkpoint/Temporal/netD_GS_weights_epoch_23.pth")
+netG.load_state_dict(checkpoint_G['generator'])
+netD.load_state_dict(checkpoint_D['discriminator'])
 
 #criterionGAN = GANLoss()
 criterionGAN = AdversarialLoss()
@@ -191,7 +196,7 @@ def train(epoch):
             logs = [("epoc", epoch),("iter", iteration),("Loss_G", loss_g.item()),("Loss_D", loss_d.item()), ("Loss_G_adv",loss_g_gan.item()),("Loss_G_L1",loss_g_l1.item()),("Loss_G_style",loss_g_style.item()),("Loss_G_content",loss_g_content.item()),("Loss_D_Real",loss_d_real.item()),("Loss_D_Fake",loss_d_fake.item())]
             log_train_data(logs)
 
-        if(iteration % 500 == 0):
+        if(iteration % 250 == 0):
             sample(iteration)
 
 
@@ -212,7 +217,7 @@ def sample(iteration):
         input = postprocess(input)
         target = postprocess(target)
     img = stitch_images(input, target, prediction)
-    samples_dir = root_path + "/samples_Temporal_LA"
+    samples_dir = root_path + "/samples_Temporal_LA2"
     if not os.path.exists(samples_dir):
         os.makedirs(samples_dir)
 
@@ -266,8 +271,8 @@ def checkpoint(epoch):
         os.mkdir("checkpoint")
     if not os.path.exists(os.path.join("checkpoint", opt.dataset)):
         os.mkdir(os.path.join("checkpoint", opt.dataset))
-    net_g_model_out_path = "checkpoint/{}/netG_weights_epoch_{}.pth".format(opt.dataset, epoch)
-    net_d_model_out_path = "checkpoint/{}/netD_weights_epoch_{}.pth".format(opt.dataset, epoch)
+    net_g_model_out_path = "checkpoint/{}/netG_LA2_weights_epoch_{}.pth".format(opt.dataset, epoch)
+    net_d_model_out_path = "checkpoint/{}/netD_LA2_weights_epoch_{}.pth".format(opt.dataset, epoch)
     #model_out_path = "checkpoint/{}/net_model_epoch_{}.pth".format(opt.dataset+"_temp_LA", epoch)
     torch.save({'generator': netG.state_dict()}, net_g_model_out_path)
     torch.save({'discriminator': netD.state_dict()}, net_d_model_out_path)
