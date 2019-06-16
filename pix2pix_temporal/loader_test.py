@@ -24,7 +24,7 @@ class DatasetFromFolder(data.Dataset):
         target_path = join(self.photo_path, self.image_filenames[index])
         frame_num = target_path.split("e")[-1]
         frame_num = int(frame_num.split(".")[0]) + 1
-        frame_1,frame_1_gray = self.get_prev(frame_num)
+        frame_1, frame_1_gray = self.get_prev(frame_num)
         target = load_img(target_path)
         input = color.rgb2gray(target)
         input = Image.fromarray(input)
@@ -32,30 +32,33 @@ class DatasetFromFolder(data.Dataset):
         frame_1_gray = self.transform(frame_1_gray)
         target = self.transform(target)
         input = self.transform(input)
-        
+
         return input, target, frame_1, frame_1_gray
 
     def __len__(self):
         return len(self.image_filenames)
 
     def get_prev(self, num):
-        if not exists(join(self.photo_path,"frame"+str(num)+".jpg")):
-            prev = load_img(join(self.photo_path,"frame"+str(num-1)+".jpg"))
+        if not exists(join(self.photo_path, "frame" + str(num) + ".jpg")):
+            prev = load_img(join(self.photo_path, "frame" + str(num - 1) + ".jpg"))
             prev_gray = color.rgb2gray(prev)
             prev_gray = Image.fromarray(prev_gray)
-            return prev,prev_gray
-            #frame_1="nothing!"
+            return prev, prev_gray
+            # frame_1="nothing!"
         else:
-            prev = load_img(join(self.photo_path,"frame"+str(num)+".jpg"))
+            prev = load_img(join(self.photo_path, "frame" + str(num) + ".jpg"))
             prev_gray = color.rgb2gray(prev)
             prev_gray = Image.fromarray(prev_gray)
-            return prev,prev_gray
-            #frame_1 = join(self.photo_path,"frame"+str(frame_num)+".jpg")
+            return prev, prev_gray
+            # frame_1 = join(self.photo_path,"frame"+str(frame_num)+".jpg")
+
 
 train_path = "E:/DBZ_Dataset/Tf_Baseline/Tester"
 train_set = DatasetFromFolder(train_path)
-training_data_loader = DataLoader(dataset=train_set, num_workers=0, batch_size=5, shuffle=False)
+training_data_loader = DataLoader(
+    dataset=train_set, num_workers=0, batch_size=5, shuffle=False
+)
 
 for i in range(10):
-    x = np.random.uniform(0,1)
+    x = np.random.uniform(0, 1)
     print(x)

@@ -16,17 +16,17 @@ def get_test_set(root_dir):
 
     return DatasetFromFolder(test_dir)
 
+
 def get_val_set(root_dir):
     val_dir = join(root_dir, "Val")
 
     return DatasetFromFolder(val_dir)
 
+
 def create_iterator(sample_size, sample_dataset):
     while True:
         sample_loader = DataLoader(
-            dataset= sample_dataset,
-            batch_size=sample_size,
-            drop_last=True
+            dataset=sample_dataset, batch_size=sample_size, drop_last=True
         )
 
         for item in sample_loader:
