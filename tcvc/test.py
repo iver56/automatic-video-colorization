@@ -10,6 +10,7 @@ from torch.utils.data import DataLoader, SequentialSampler
 from torchvision.utils import save_image
 
 from tcvc.data import get_val_set
+from tcvc.gif import make_gif
 from tcvc.othernetworks import InpaintGenerator
 
 # Testing settings
@@ -83,3 +84,5 @@ with torch.no_grad():
         print("saving:" + image_name)
         # imsave(out,"result/{}/{}".format(opt.dataset, image_name))
         counter += 1
+
+make_gif("result/{}".format(opt.dataset))
