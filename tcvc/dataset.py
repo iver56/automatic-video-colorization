@@ -11,7 +11,7 @@ from tcvc.util import is_image_file, load_img
 
 
 class DatasetFromFolder(data.Dataset):
-    def __init__(self, image_dir, use_line_art=False):
+    def __init__(self, image_dir, use_line_art=True):
         super(DatasetFromFolder, self).__init__()
         self.use_line_art = use_line_art
         self.photo_path = image_dir
