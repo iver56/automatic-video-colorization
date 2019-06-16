@@ -9,7 +9,7 @@ from torch.autograd import Variable
 from torch.utils.data import DataLoader, SequentialSampler
 from torchvision.utils import save_image
 
-from pix2pix_temporal.data import get_test_set, get_val_set
+from pix2pix_temporal.data import get_val_set
 from pix2pix_temporal.othernetworks import InpaintGenerator
 
 # Testing settings
@@ -33,14 +33,12 @@ opt = parser.parse_args()
 print(opt)
 
 val_set = get_val_set(os.path.join(opt.dataset_path, opt.dataset))
-test_set = get_test_set(os.path.join(opt.dataset_path, opt.dataset))
 
 seq_sampler = SequentialSampler(val_set)
 
 val_data_loader = DataLoader(
     dataset=val_set, num_workers=0, batch_size=1, shuffle=False, sampler=seq_sampler
 )
-# testing_data_loader = DataLoader(dataset=test_set, num_workers=opt.threads, batch_size=16, shuffle=False)
 
 checkpoint = torch.load(opt.model)
 netG = InpaintGenerator()
