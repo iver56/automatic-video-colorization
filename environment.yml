@@ -8,7 +8,7 @@ dependencies:
 - numpy>=1.15,<2
 - pip>=9.0.1,<=19.1
 - python=3.6.6
-- scikit-image
+- scikit-image=0.14.2
 - scipy>=1.0,<2
 - pytorch=1.0
 - torchvision=0.2.2
