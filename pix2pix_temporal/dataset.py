@@ -38,8 +38,9 @@ class DatasetFromFolder(data.Dataset):
             input_image = self.transform(input_image)
 
             return input_image, target, frame_prev
-        except:
+        except Exception as e:
             print("Something went wrong frame:" + str(frame_num))
+            print(e)
             return self[0]
 
     def __len__(self):
