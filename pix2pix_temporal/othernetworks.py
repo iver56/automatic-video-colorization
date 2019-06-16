@@ -179,11 +179,14 @@ class Discriminator(BaseNetwork):
         use_sigmoid=True,
         use_spectral_norm=True,
         init_weights=True,
-        gpu_ids=[],
+        gpu_ids=None,
     ):
         super(Discriminator, self).__init__()
         self.use_sigmoid = use_sigmoid
-        self.gpu_ids = gpu_ids
+        if gpu_ids is None:
+            self.gpu_ids = []
+        else:
+            self.gpu_ids = gpu_ids
 
         self.conv1 = self.features = nn.Sequential(
             spectral_norm(

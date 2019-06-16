@@ -124,14 +124,17 @@ class ResnetGenerator(nn.Module):
         norm_layer=nn.BatchNorm2d,
         use_dropout=False,
         n_blocks=6,
-        gpu_ids=[],
+        gpu_ids=None,
     ):
         assert n_blocks >= 0
         super(ResnetGenerator, self).__init__()
         self.input_nc = input_nc
         self.output_nc = output_nc
         self.ngf = ngf
-        self.gpu_ids = gpu_ids
+        if gpu_ids is None:
+            self.gpu_ids = []
+        else:
+            self.gpu_ids = gpu_ids
 
         model = [
             nn.Conv2d(input_nc, ngf, kernel_size=7, padding=3),
@@ -227,10 +230,13 @@ class NLayerDiscriminator(nn.Module):
         n_layers=5,
         norm_layer=nn.BatchNorm2d,
         use_sigmoid=False,
-        gpu_ids=[],
+        gpu_ids=None,
     ):
         super(NLayerDiscriminator, self).__init__()
-        self.gpu_ids = gpu_ids
+        if gpu_ids is None:
+            self.gpu_ids = []
+        else:
+            self.gpu_ids = gpu_ids
 
         kw = 5
         padw = int(np.ceil((kw - 1) / 2))
