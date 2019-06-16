@@ -11,8 +11,9 @@ from pix2pix_temporal.util import is_image_file, load_img
 
 
 class DatasetFromFolder(data.Dataset):
-    def __init__(self, image_dir):
+    def __init__(self, image_dir, use_line_art=False):
         super(DatasetFromFolder, self).__init__()
+        self.use_line_art = use_line_art
         self.photo_path = image_dir
         self.image_filenames = [x for x in listdir(self.photo_path) if is_image_file(x)]
         transform_list = [transforms.ToTensor()]
@@ -28,9 +29,10 @@ class DatasetFromFolder(data.Dataset):
             frame_prev = self.get_prev(frame_num)  # will be either black or colored
             target = load_img(target_path)
             input_image = color.rgb2gray(target)
-            # needed for lineart only not grayscale
-            input_image = feature.canny(input_image, sigma=1)
-            input_image = util.invert(input_image)
+            if self.use_line_art:
+                # needed for lineart only, not grayscale
+                input_image = feature.canny(input_image, sigma=1)
+                input_image = util.invert(input_image)
             input_image = Image.fromarray(np.uint8(input_image) * 255)
             # input = Image.fromarray(input)
             frame_prev = self.transform(frame_prev)
