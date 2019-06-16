@@ -125,3 +125,7 @@ dmypy.json
 
 # Jetbrains IDE
 .idea
+
+# Output data
+result/*
+
