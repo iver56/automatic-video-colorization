@@ -11,7 +11,6 @@ from torchvision.utils import save_image
 
 from pix2pix_temporal.data import get_test_set, get_val_set
 from pix2pix_temporal.othernetworks import InpaintGenerator
-from pix2pix_temporal.util import is_image_file
 
 # Testing settings
 parser = argparse.ArgumentParser(description="pix2pix-PyTorch-implementation")
@@ -19,16 +18,22 @@ parser.add_argument("--dataset", required=True, help="facades")
 parser.add_argument(
     "--model",
     type=str,
-    default="checkpoint/facades/netG_model_epoch_200.pth",
+    default="pix2pix_temporal/checkpoint/Temporal/netG_weights_epoch_1.pth",
     help="model file to use",
+)
+parser.add_argument(
+    "--dataset-path",
+    dest="dataset_path",
+    type=str,
+    default="D:\\code\\demo-style\\data\\content_images\\zeven-bw",
+    help="The path to the root folder of the dataset",
 )
 parser.add_argument("--cuda", action="store_true", help="use cuda")
 opt = parser.parse_args()
 print(opt)
 
-root_path = "/home/paperspace/Desktop/Temporal-Anime"
-val_set = get_val_set(os.path.join(root_path, opt.dataset))
-test_set = get_test_set(os.path.join(root_path, opt.dataset))
+val_set = get_val_set(os.path.join(opt.dataset_path, opt.dataset))
+test_set = get_test_set(os.path.join(opt.dataset_path, opt.dataset))
 
 seq_sampler = SequentialSampler(val_set)
 
@@ -41,10 +46,6 @@ checkpoint = torch.load(opt.model)
 netG = InpaintGenerator()
 netG.load_state_dict(checkpoint["generator"])
 netG.cuda()
-
-# image_dir = "dataset/{}/test/a/".format(opt.dataset)
-image_dir = "/home/paperspace/Desktop/Temporal-Anime/{}/Val/".format(opt.dataset)
-image_filenames = [x for x in sorted(os.listdir(image_dir)) if is_image_file(x)]
 
 transform_list = [
     transforms.ToTensor(),
@@ -84,30 +85,3 @@ with torch.no_grad():
         print("saving:" + image_name)
         # imsave(out,"result/{}/{}".format(opt.dataset, image_name))
         counter += 1
-
-"""
-for image_name in image_filenames:
-    img = load_img(image_dir + image_name)
-    img = color.rgb2gray(img)
-    #img = feature.canny(img,sigma = 2)
-    #img = util.invert(img)
-    #img = Image.fromarray(np.uint8(img)*255)
-    img = Image.fromarray(img)
-    img = transform(img)
-    input_image = Variable(img, volatile=True).view(1, -1, 256, 256)
-    if opt.cuda:
-        netG = netG.cuda()
-        input_image = input_image.cuda()
-        #previous = previous.cuda()
-    gen_input = torch.cat((input_image,previous.cuda()),1)
-    out = netG(gen_input)
-    previous = out
-    #out = out.cpu()
-    #out_img = out.data[0]
-    out = postprocess(out)
-    #out_img = np.array(out_img).astype(np.uint8)
-    if not os.path.exists(os.path.join("result", opt.dataset)):
-        os.makedirs(os.path.join("result", opt.dataset))
-    #save_img(out_img, "result/{}/{}".format(opt.dataset, image_name))
-    imsave(out,"result/{}/{}".format(opt.dataset, image_name))
-"""
