@@ -39,11 +39,9 @@ parser.add_argument(
     "--ndf", type=int, default=64, help="discriminator filters in first conv layer"
 )  # increasing filters in discriminator made slight diff (not used with inpaint generator)
 parser.add_argument(
-    "--lr", type=float, default=0.0001, help="Learning Rate. Default=0.002"
+    "--lr", type=float, default=0.0001, help="Learning Rate. Default=0.0001"
 )  # smaller lr 0.0001 instead of 0.0003
-parser.add_argument(
-    "--beta1", type=float, default=0, help="beta1 for adam. default=0.5"
-)
+parser.add_argument("--beta1", type=float, default=0, help="beta1 for adam. default=0")
 parser.add_argument("--cuda", action="store_true", help="use cuda?")
 parser.add_argument(
     "--threads", type=int, default=0, help="number of threads for data loader to use"
