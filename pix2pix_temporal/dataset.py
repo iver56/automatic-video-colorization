@@ -1,13 +1,12 @@
 from os import listdir
 from os.path import join, exists
-from PIL import Image
+
 import numpy as np
-import torch
 import torch.utils.data as data
 import torchvision.transforms as transforms
+from PIL import Image
+from skimage import feature, color, util
 
-from skimage import io, feature, color, img_as_uint, util
-from skimage.transform import resize
 from pix2pix_temporal.util import is_image_file, load_img
 
 

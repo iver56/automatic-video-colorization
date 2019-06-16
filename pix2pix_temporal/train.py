@@ -1,24 +1,21 @@
 from __future__ import print_function
+
 import argparse
 import os
-import numpy as np
-from math import log10
 from os.path import join
-from PIL import Image
-#fetch test
+
+import math
 import torch
+import torch.backends.cudnn as cudnn
 import torch.nn as nn
 import torch.optim as optim
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
-from pix2pix_temporal.networks import define_G, define_D, GANLoss, print_network
-from pix2pix_temporal.util import Progbar, stitch_images, postprocess
-from pix2pix_temporal.data import get_training_set, get_test_set, create_iterator
-from pix2pix_temporal.dataset import DatasetFromFolder
-from pix2pix_temporal.loss import AdversarialLoss, StyleLoss, PerceptualLoss
-import torch.backends.cudnn as cudnn
-import torchvision.transforms as transforms
 
+from pix2pix_temporal.data import get_training_set, get_test_set, create_iterator
+from pix2pix_temporal.loss import AdversarialLoss, StyleLoss, PerceptualLoss
+from pix2pix_temporal.networks import define_G, define_D, print_network
+from pix2pix_temporal.util import stitch_images, postprocess
 
 os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
@@ -261,7 +258,7 @@ def test():
         prediction = netG(pred_input)
         #prediction = netG(input)
         mse = criterionMSE(prediction, target)
-        psnr = 10 * log10(1 / mse.data[0])
+        psnr = 10 * math.log10(1 / mse.data[0])
         avg_psnr += psnr
     print("===> Avg. PSNR: {:.4f} dB".format(avg_psnr / len(testing_data_loader)))
 

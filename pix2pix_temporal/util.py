@@ -1,9 +1,10 @@
-import numpy as np
-import os
 import sys
 import time
+
+import numpy as np
 from PIL import Image
 from scipy.misc import imread, imresize
+
 
 def is_image_file(filename):
     return any(filename.endswith(extension) for extension in [".png", ".jpg", ".jpeg"])
