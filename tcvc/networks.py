@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 from torch.autograd import Variable
 
-from pix2pix_temporal.othernetworks import Discriminator, InpaintGenerator
+from tcvc.othernetworks import Discriminator, InpaintGenerator
 
 
 def weights_init(m):

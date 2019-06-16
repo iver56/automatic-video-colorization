@@ -7,7 +7,7 @@ import torchvision.transforms as transforms
 from PIL import Image
 from skimage import feature, color, util
 
-from pix2pix_temporal.util import is_image_file, load_img
+from tcvc.util import is_image_file, load_img
 
 
 class DatasetFromFolder(data.Dataset):

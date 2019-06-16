@@ -2,7 +2,7 @@ from os.path import join
 
 from torch.utils.data import DataLoader
 
-from pix2pix_temporal.dataset import DatasetFromFolder
+from tcvc.dataset import DatasetFromFolder
 
 
 def get_training_set(root_dir):

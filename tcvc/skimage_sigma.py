@@ -11,7 +11,7 @@ import torchvision.transforms as transforms
 from PIL import Image
 from torch.utils.data import DataLoader
 
-from pix2pix_temporal.data import get_test_set
+from tcvc.data import get_test_set
 
 transform_list_rgb = [
     transforms.ToTensor(),

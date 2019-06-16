@@ -12,10 +12,10 @@ import torch.optim as optim
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
 
-from pix2pix_temporal.data import get_training_set, get_test_set, create_iterator
-from pix2pix_temporal.loss import AdversarialLoss, StyleLoss, PerceptualLoss
-from pix2pix_temporal.networks import define_G, define_D, print_network
-from pix2pix_temporal.util import stitch_images, postprocess
+from tcvc.data import get_training_set, get_test_set, create_iterator
+from tcvc.loss import AdversarialLoss, StyleLoss, PerceptualLoss
+from tcvc.networks import define_G, define_D, print_network
+from tcvc.util import stitch_images, postprocess
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 

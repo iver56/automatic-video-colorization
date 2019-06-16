@@ -9,8 +9,8 @@ from torch.autograd import Variable
 from torch.utils.data import DataLoader, SequentialSampler
 from torchvision.utils import save_image
 
-from pix2pix_temporal.data import get_val_set
-from pix2pix_temporal.othernetworks import InpaintGenerator
+from tcvc.data import get_val_set
+from tcvc.othernetworks import InpaintGenerator
 
 # Testing settings
 parser = argparse.ArgumentParser(description="pix2pix-PyTorch-implementation")
@@ -18,7 +18,7 @@ parser.add_argument("--dataset", required=True, help="facades")
 parser.add_argument(
     "--model",
     type=str,
-    default="pix2pix_temporal/checkpoint/Temporal/netG_weights_epoch_1.pth",
+    default="tcvc/checkpoint/Temporal/netG_weights_epoch_1.pth",
     help="model file to use",
 )
 parser.add_argument(
