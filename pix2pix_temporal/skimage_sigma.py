@@ -9,45 +9,15 @@ from os.path import join
 import numpy as np
 import torchvision.transforms as transforms
 from PIL import Image
-from scipy.misc import imread, imresize
 from torch.utils.data import DataLoader
 
 from pix2pix_temporal.data import get_test_set
-
-
-# im = imread('/Users/harrythasarathan/Downloads/Mighty_Morphin_Power_YEngers.jpg')
-# print(im.shape)
-# im = np.resize(im,(256,256,3))
-# print(im.shape)
-# im = color.rgb2gray(im)
-# im = feature.canny(im,sigma=2)
-# im = cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
-# im = cv2.Canny(im, 100,200)
-# im = util.invert(im)
-# im = resize(im,(1,im.shape[0],im.shape[1]))
-# print(im.shape)
-# im = cv2.bilateralFilter(im,15,75,75)
-# io.imshow(im)
-# io.show()
-# io.imsave('/Users/harrythasarathan/Desktop/Python/transform2.jpg',img_as_uint(im))
-
-
-def load_img(filepath):
-    # img = Image.open(filepath).convert('RGB')
-    # img = img.resize((256, 256), Image.BICUBIC)
-    img = imread(filepath)
-    img = imresize(img, (256, 256))
-    return img
-
 
 transform_list_rgb = [
     transforms.ToTensor(),
     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
 ]
 transform_list_la = [transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))]
-
-# transform_list_rgb = [transforms.ToTensor()]
-# transform_list_la = [transforms.ToTensor()]
 
 transform_rgb = transforms.Compose(transform_list_rgb)
 transform_la = transforms.Compose(transform_list_la)
@@ -74,23 +44,6 @@ def create_iterator(sample_size):
 
 
 smple_itr = create_iterator(8)
-
-# convert_gray = transforms.Grayscale(1)
-# flepth = "/Users/harrythasarathan/Desktop/Python/mighty_morphin_kanye_rangers.jpg"
-# target = np.array(target)
-"""
-target = load_img(join(train_dir, image_filenames[1]))
-input_image = color.rgb2gray(target)
-input_image = feature.canny(input_image,sigma = 2)
-input_image = util.invert(input_image)
-print(input_image.shape)
-print(target.shape)
-io.imshow(input_image)
-io.show()
-input_image = Image.fromarray(input_image)
-target = transform_rgb(target)
-input_image = transform_la(input_image)
-"""
 
 
 def stitch_images(inputs, *outputs, img_per_row=2):
@@ -128,14 +81,7 @@ def postprocess(img):
 
 def sample(iteration):
     input_image, target = next(smple_itr)
-    """
-    input_image = Variable(input_image,volatile = True)
-    if opt.cuda: 
-        input_image = input_image.cuda()
-        target = target.cuda()
-    prediction = netG(input_image)
-    prediction = postprocess(prediction)
-    """
+
     input_image = postprocess(input_image)
     target = postprocess(target)
     img = stitch_images(input_image, target, target)
@@ -149,20 +95,3 @@ def sample(iteration):
 
 
 sample(700)
-
-"""
-target = load_img(flepth)
-input_image = color.rgb2gray(target)
-input_image = feature.canny(input_image,sigma = 2)
-input_image = util.invert(input_image)
-print(input_image.shape)
-print(target.shape)
-io.imshow(input_image)
-io.show()
-input_image = Image.fromarray(np.uint8(input_image)*255)
-target = transform_rgb(target)
-input_image = transform_la(input_image)
-#input_image = transforms.ToPILImage()(input_image)
-#input_image.save('/Users/harrythasarathan/Desktop/Python/transformF.jpg')
-save_image(input_image,'/Users/harrythasarathan/Desktop/Python/transformT.jpg' )
-"""
