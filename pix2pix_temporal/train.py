@@ -11,11 +11,11 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
-from networks import define_G, define_D, GANLoss, print_network
-from util import Progbar, stitch_images, postprocess
-from data import get_training_set, get_test_set, create_iterator
-from dataset import DatasetFromFolder
-from loss import AdversarialLoss, StyleLoss, PerceptualLoss
+from pix2pix_temporal.networks import define_G, define_D, GANLoss, print_network
+from pix2pix_temporal.util import Progbar, stitch_images, postprocess
+from pix2pix_temporal.data import get_training_set, get_test_set, create_iterator
+from pix2pix_temporal.dataset import DatasetFromFolder
+from pix2pix_temporal.loss import AdversarialLoss, StyleLoss, PerceptualLoss
 import torch.backends.cudnn as cudnn
 import torchvision.transforms as transforms
 

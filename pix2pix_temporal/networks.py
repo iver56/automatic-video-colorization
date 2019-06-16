@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
-from othernetworks import Discriminator, InpaintGenerator
+from pix2pix_temporal.othernetworks import Discriminator, InpaintGenerator
 import numpy as np
 
 

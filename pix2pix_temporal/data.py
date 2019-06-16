@@ -1,6 +1,6 @@
 
 from os.path import join
-from dataset import DatasetFromFolder
+from pix2pix_temporal.dataset import DatasetFromFolder
 from torch.utils.data import DataLoader
 
 def get_training_set(root_dir):

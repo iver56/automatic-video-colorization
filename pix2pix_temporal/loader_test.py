@@ -9,7 +9,7 @@ import torchvision.transforms as transforms
 
 from skimage import io, feature, color, img_as_uint, util
 from skimage.transform import resize
-from util import is_image_file, load_img
+from pix2pix_temporal.util import is_image_file, load_img
 
 
 class DatasetFromFolder(data.Dataset):

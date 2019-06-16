@@ -12,13 +12,12 @@ from skimage import io, feature, color, img_as_uint, util
 from skimage.transform import resize
 from scipy.misc import imread, imresize
 from os.path import join
-import torchvision.transforms as transforms
 import torch
 import torch.utils.data as data
 import torchvision.transforms as transforms
 
 from torch.utils.data import DataLoader
-from data import get_training_set, get_test_set
+from pix2pix_temporal.data import get_training_set, get_test_set
 
 #im = imread('/Users/harrythasarathan/Downloads/Mighty_Morphin_Power_YEngers.jpg')
 #print(im.shape)

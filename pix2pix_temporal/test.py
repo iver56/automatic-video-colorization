@@ -1,8 +1,8 @@
 from __future__ import print_function
 from PIL import Image
 from skimage import io, feature, color, util
-from othernetworks import InpaintGenerator
-from util import imsave, postprocess
+from pix2pix_temporal.othernetworks import InpaintGenerator
+from pix2pix_temporal.util import postprocess
 import argparse
 import os
 import numpy as np
@@ -12,9 +12,9 @@ from torch.autograd import Variable
 from torch.utils.data import DataLoader, SequentialSampler
 import torchvision.transforms as transforms
 from torchvision.utils import save_image
-from data import get_training_set, get_test_set, get_val_set, create_iterator
-from dataset import DatasetFromFolder
-from util import is_image_file, load_img,save_img
+from pix2pix_temporal.data import get_training_set, get_test_set, get_val_set, create_iterator
+from pix2pix_temporal.dataset import DatasetFromFolder
+from pix2pix_temporal.util import is_image_file, load_img,save_img
 
 # Testing settings
 parser = argparse.ArgumentParser(description='pix2pix-PyTorch-implementation')
