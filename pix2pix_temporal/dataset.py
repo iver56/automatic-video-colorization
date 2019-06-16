@@ -26,17 +26,17 @@ class DatasetFromFolder(data.Dataset):
             frame_num = int(frame_num.split(".")[0]) - 1
             frame_prev = self.get_prev(frame_num)  # will be either black or colored
             target = load_img(target_path)
-            input = color.rgb2gray(target)
+            input_image = color.rgb2gray(target)
             # needed for lineart only not grayscale
-            input = feature.canny(input, sigma=1)
-            input = util.invert(input)
-            input = Image.fromarray(np.uint8(input) * 255)
+            input_image = feature.canny(input_image, sigma=1)
+            input_image = util.invert(input_image)
+            input_image = Image.fromarray(np.uint8(input_image) * 255)
             # input = Image.fromarray(input)
             frame_prev = self.transform(frame_prev)
             target = self.transform(target)
-            input = self.transform(input)
+            input_image = self.transform(input_image)
 
-            return input, target, frame_prev
+            return input_image, target, frame_prev
         except:
             print("Something went wrong frame:" + str(frame_num))
             return self[0]

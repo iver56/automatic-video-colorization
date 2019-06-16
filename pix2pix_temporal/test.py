@@ -60,19 +60,19 @@ transform = transforms.Compose(transform_list)
 counter = 0
 with torch.no_grad():
     for batch in val_data_loader:
-        input, target, prev_frame = (
+        input_image, target, prev_frame = (
             Variable(batch[0], volatile=True),
             Variable(batch[1], volatile=True),
             Variable(batch[2], volatile=True),
         )
         if opt.cuda:
-            input = input.cuda()
+            input_image = input_image.cuda()
             target = target.cuda()
             prev_frame = prev_frame.cuda()
         if counter != 0:
             prev_frame = tmp
             print("success")
-        pred_input = torch.cat((input, prev_frame), 1)
+        pred_input = torch.cat((input_image, prev_frame), 1)
         out = netG(pred_input)
         tmp = out
         # out = postprocess(out)
@@ -94,12 +94,12 @@ for image_name in image_filenames:
     #img = Image.fromarray(np.uint8(img)*255)
     img = Image.fromarray(img)
     img = transform(img)
-    input = Variable(img, volatile=True).view(1, -1, 256, 256)
+    input_image = Variable(img, volatile=True).view(1, -1, 256, 256)
     if opt.cuda:
         netG = netG.cuda()
-        input = input.cuda()
+        input_image = input_image.cuda()
         #previous = previous.cuda()
-    gen_input = torch.cat((input,previous.cuda()),1)
+    gen_input = torch.cat((input_image,previous.cuda()),1)
     out = netG(gen_input)
     previous = out
     #out = out.cpu()

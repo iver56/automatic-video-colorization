@@ -80,16 +80,16 @@ smple_itr = create_iterator(8)
 # target = np.array(target)
 """
 target = load_img(join(train_dir, image_filenames[1]))
-input = color.rgb2gray(target)
-input = feature.canny(input,sigma = 2)
-input = util.invert(input)
-print(input.shape)
+input_image = color.rgb2gray(target)
+input_image = feature.canny(input_image,sigma = 2)
+input_image = util.invert(input_image)
+print(input_image.shape)
 print(target.shape)
-io.imshow(input)
+io.imshow(input_image)
 io.show()
-input = Image.fromarray(input)
+input_image = Image.fromarray(input_image)
 target = transform_rgb(target)
-input = transform_la(input)
+input_image = transform_la(input_image)
 """
 
 
@@ -127,18 +127,18 @@ def postprocess(img):
 
 
 def sample(iteration):
-    input, target = next(smple_itr)
+    input_image, target = next(smple_itr)
     """
-    input = Variable(input,volatile = True)
+    input_image = Variable(input_image,volatile = True)
     if opt.cuda: 
-        input = input.cuda()
+        input_image = input_image.cuda()
         target = target.cuda()
-    prediction = netG(input)
+    prediction = netG(input_image)
     prediction = postprocess(prediction)
     """
-    input = postprocess(input)
+    input_image = postprocess(input_image)
     target = postprocess(target)
-    img = stitch_images(input, target, target)
+    img = stitch_images(input_image, target, target)
     samples_dir = root_path + "/samples_Tf_Baseline"
     if not os.path.exists(samples_dir):
         os.makedirs(samples_dir)
@@ -152,17 +152,17 @@ sample(700)
 
 """
 target = load_img(flepth)
-input = color.rgb2gray(target)
-input = feature.canny(input,sigma = 2)
-input = util.invert(input)
-print(input.shape)
+input_image = color.rgb2gray(target)
+input_image = feature.canny(input_image,sigma = 2)
+input_image = util.invert(input_image)
+print(input_image.shape)
 print(target.shape)
-io.imshow(input)
+io.imshow(input_image)
 io.show()
-input = Image.fromarray(np.uint8(input)*255)
+input_image = Image.fromarray(np.uint8(input_image)*255)
 target = transform_rgb(target)
-input = transform_la(input)
-#input = transforms.ToPILImage()(input)
-#input.save('/Users/harrythasarathan/Desktop/Python/transformF.jpg')
-save_image(input,'/Users/harrythasarathan/Desktop/Python/transformT.jpg' )
+input_image = transform_la(input_image)
+#input_image = transforms.ToPILImage()(input_image)
+#input_image.save('/Users/harrythasarathan/Desktop/Python/transformF.jpg')
+save_image(input_image,'/Users/harrythasarathan/Desktop/Python/transformT.jpg' )
 """

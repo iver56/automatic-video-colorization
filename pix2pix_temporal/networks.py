@@ -88,29 +88,29 @@ class GANLoss(nn.Module):
         else:
             self.loss = nn.BCEWithLogitsLoss()
 
-    def get_target_tensor(self, input, target_is_real):
+    def get_target_tensor(self, input_image, target_is_real):
         target_tensor = None
         if target_is_real:
             create_label = (self.real_label_var is None) or (
-                self.real_label_var.numel() != input.numel()
+                self.real_label_var.numel() != input_image.numel()
             )
             if create_label:
-                real_tensor = self.Tensor(input.size()).fill_(self.real_label)
+                real_tensor = self.Tensor(input_image.size()).fill_(self.real_label)
                 self.real_label_var = Variable(real_tensor, requires_grad=False)
             target_tensor = self.real_label_var
         else:
             create_label = (self.fake_label_var is None) or (
-                self.fake_label_var.numel() != input.numel()
+                self.fake_label_var.numel() != input_image.numel()
             )
             if create_label:
-                fake_tensor = self.Tensor(input.size()).fill_(self.fake_label)
+                fake_tensor = self.Tensor(input_image.size()).fill_(self.fake_label)
                 self.fake_label_var = Variable(fake_tensor, requires_grad=False)
             target_tensor = self.fake_label_var
         return target_tensor
 
-    def __call__(self, input, target_is_real):
-        target_tensor = self.get_target_tensor(input, target_is_real)
-        return self.loss(input, target_tensor.cuda())
+    def __call__(self, input_image, target_is_real):
+        target_tensor = self.get_target_tensor(input_image, target_is_real)
+        return self.loss(input_image, target_tensor.cuda())
 
 
 # Defines the generator that consists of Resnet blocks between a few
@@ -178,11 +178,11 @@ class ResnetGenerator(nn.Module):
 
         self.model = nn.Sequential(*model)
 
-    def forward(self, input):
-        if self.gpu_ids and isinstance(input.data, torch.cuda.FloatTensor):
-            return nn.parallel.data_parallel(self.model, input, self.gpu_ids)
+    def forward(self, input_image):
+        if self.gpu_ids and isinstance(input_image.data, torch.cuda.FloatTensor):
+            return nn.parallel.data_parallel(self.model, input_image, self.gpu_ids)
         else:
-            return self.model(input)
+            return self.model(input_image)
 
 
 # Define a resnet block
@@ -279,8 +279,8 @@ class NLayerDiscriminator(nn.Module):
 
         self.model = nn.Sequential(*sequence)
 
-    def forward(self, input):
-        if len(self.gpu_ids) and isinstance(input.data, torch.cuda.FloatTensor):
-            return nn.parallel.data_parallel(self.model, input, self.gpu_ids)
+    def forward(self, input_image):
+        if len(self.gpu_ids) and isinstance(input_image.data, torch.cuda.FloatTensor):
+            return nn.parallel.data_parallel(self.model, input_image, self.gpu_ids)
         else:
-            return self.model(input)
+            return self.model(input_image)

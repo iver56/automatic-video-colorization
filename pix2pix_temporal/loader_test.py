@@ -26,14 +26,14 @@ class DatasetFromFolder(data.Dataset):
         frame_num = int(frame_num.split(".")[0]) + 1
         frame_1, frame_1_gray = self.get_prev(frame_num)
         target = load_img(target_path)
-        input = color.rgb2gray(target)
-        input = Image.fromarray(input)
+        input_image = color.rgb2gray(target)
+        input_image = Image.fromarray(input_image)
         frame_1 = self.transform(frame_1)
         frame_1_gray = self.transform(frame_1_gray)
         target = self.transform(target)
-        input = self.transform(input)
+        input_image = self.transform(input_image)
 
-        return input, target, frame_1, frame_1_gray
+        return input_image, target, frame_1, frame_1_gray
 
     def __len__(self):
         return len(self.image_filenames)

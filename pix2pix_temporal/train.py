@@ -256,18 +256,18 @@ def train(epoch):
 
 def sample(iteration):
     with torch.no_grad():
-        input, target, prev_frame = next(sample_iterator)
-        # input = Variable(input, requires_grad = False)
+        input_image, target, prev_frame = next(sample_iterator)
+        # input_image = Variable(input_image, requires_grad = False)
         if opt.cuda:
-            input = input.cuda()
+            input_image = input_image.cuda()
             target = target.cuda()
             prev_frame = prev_frame.cuda()
-        pred_input = torch.cat((input, prev_frame), 1)
+        pred_input = torch.cat((input_image, prev_frame), 1)
         prediction = netG(pred_input)
         prediction = postprocess(prediction)
-        input = postprocess(input)
+        input_image = postprocess(input_image)
         target = postprocess(target)
-    img = stitch_images(input, target, prediction)
+    img = stitch_images(input_image, target, prediction)
     samples_dir = root_path + "/samples_Temporal_LA2"
     if not os.path.exists(samples_dir):
         os.makedirs(samples_dir)
@@ -307,18 +307,18 @@ def log_train_data(loginfo):
 def test():
     avg_psnr = 0
     for batch in testing_data_loader:
-        input, target, prev_frame = (
+        input_image, target, prev_frame = (
             Variable(batch[0], volatile=True),
             Variable(batch[1], volatile=True),
             Variable(batch[2], volatile=True),
         )
         if opt.cuda:
-            input = input.cuda()
+            input_image = input_image.cuda()
             target = target.cuda()
             prev_frame = prev_frame.cuda()
-        pred_input = torch.cat((input, prev_frame), 1)
+        pred_input = torch.cat((input_image, prev_frame), 1)
         prediction = netG(pred_input)
-        # prediction = netG(input)
+        # prediction = netG(input_image)
         mse = criterionMSE(prediction, target)
         psnr = 10 * math.log10(1 / mse.data[0])
         avg_psnr += psnr
