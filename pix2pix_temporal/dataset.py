@@ -20,6 +20,7 @@ class DatasetFromFolder(data.Dataset):
 
     def __getitem__(self, index):
         # Load Image
+        frame_num = None
         try:
             target_path = join(self.photo_path, self.image_filenames[index])
             frame_num = target_path.split("e")[-1]
