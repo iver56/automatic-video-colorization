@@ -1,18 +1,17 @@
 name: tcvc
 channels:
-- defaults
 - pytorch
+- defaults
 dependencies:
-- cudatoolkit=10.0
 - matplotlib=3.0
 - mkl
 - numpy>=1.13,<2
-- pip>=9.0.1,<=19.1
-- python=3.6.6
+- pip>=9.0.1,<=19.1.1
+- python=3.5.5
 - scikit-image>=0.14,<1
 - scipy>=1.0,<2
-- pytorch=1.1
-- torchvision=0.3
+- pytorch=0.4.1
 - pip:
   - black
   - Pillow>=5.1,<=6
+  - torchvision==0.2
