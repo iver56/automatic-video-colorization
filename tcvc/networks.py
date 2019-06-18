@@ -15,7 +15,9 @@ def weights_init(m):
         m.bias.data.fill_(0)
 
 
-def define_G(input_nc, output_nc, ngf, use_dropout=True, gpu_ids=[]):
+def define_G(input_nc, output_nc, ngf, use_dropout=True, gpu_ids=None):
+    if gpu_ids is None:
+        gpu_ids = []
     use_gpu = len(gpu_ids) > 0
 
     if use_gpu:
@@ -30,7 +32,9 @@ def define_G(input_nc, output_nc, ngf, use_dropout=True, gpu_ids=[]):
     return netG
 
 
-def define_D(input_nc, ndf, use_sigmoid=True, gpu_ids=[]):
+def define_D(input_nc, ndf, use_sigmoid=True, gpu_ids=None):
+    if gpu_ids is None:
+        gpu_ids = []
     use_gpu = len(gpu_ids) > 0
 
     if use_gpu:
@@ -52,8 +56,8 @@ def print_network(net):
     print("Total number of parameters: %d" % num_params)
 
 
-# Defines the GAN loss which uses either LSGAN or the regular GAN.
 class GANLoss(nn.Module):
+    """Define the GAN loss which uses either LSGAN or the regular GAN."""
     def __init__(
         self,
         use_lsgan=False,
@@ -96,9 +100,11 @@ class GANLoss(nn.Module):
         return self.loss(input_image, target_tensor.cuda())
 
 
-# Defines the generator that consists of Resnet blocks between a few
-# downsampling/upsampling operations.
 class ResnetGenerator(nn.Module):
+    """
+    Define the generator that consists of Resnet blocks between a few
+    downsampling/upsampling operations.
+    """
     def __init__(
         self,
         input_nc,
@@ -171,8 +177,9 @@ class ResnetGenerator(nn.Module):
             return self.model(input_image)
 
 
-# Define a resnet block
+
 class ResnetBlock(nn.Module):
+    """Define a resnet block."""
     def __init__(self, dim, padding_type, norm_layer, use_dropout):
         super(ResnetBlock, self).__init__()
         self.conv_block = self.build_conv_block(
@@ -181,7 +188,6 @@ class ResnetBlock(nn.Module):
 
     def build_conv_block(self, dim, padding_type, norm_layer, use_dropout):
         conv_block = []
-        p = 0
         assert padding_type == "zero"
         p = 1
 
