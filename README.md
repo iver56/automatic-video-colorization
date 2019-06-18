@@ -4,7 +4,11 @@
 
 `conda env create`
 
-## Test
+## Apply video colorization to a folder of PNG frames
+
+`python -m tcvc.apply --input-path /path/to/images/`
+
+## Run tests
 
 `pytest`
 

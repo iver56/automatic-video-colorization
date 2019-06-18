@@ -23,8 +23,8 @@ if __name__ == "__main__":
         help="model file to use",
     )
     parser.add_argument(
-        "--dataset-path",
-        dest="dataset_path",
+        "--input-path",
+        dest="input_path",
         type=str,
         default="D:\\code\\demo-style\\data\\content_images\\zeven-bw\\zeven",
         help="The path to the folder that contains the images (frames)",
@@ -40,7 +40,7 @@ if __name__ == "__main__":
     )
     opt = parser.parse_args()
 
-    val_set = get_val_set(opt.dataset_path)
+    val_set = get_val_set(opt.input_path)
 
     seq_sampler = SequentialSampler(val_set)
 
@@ -60,7 +60,7 @@ if __name__ == "__main__":
 
     transform = transforms.Compose(transform_list)
 
-    result_dir = os.path.join(opt.dataset_path, "colored")
+    result_dir = os.path.join(opt.input_path, "colored")
     os.makedirs(result_dir, exist_ok=True)
 
     # first previous frame needs to be zero image
