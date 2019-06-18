@@ -5,7 +5,7 @@ import imageio
 import numpy as np
 
 
-def get_file_paths(image_root_path, file_extensions=("jpg",)):
+def get_file_paths(image_root_path, file_extensions=("jpg", "png")):
     """Return a list of paths to all files with the given in a directory
     Does not check subdirectories.
     """

@@ -8,6 +8,7 @@ import torchvision.transforms as transforms
 from torch.autograd import Variable
 from torch.utils.data import DataLoader, SequentialSampler
 from torchvision.utils import save_image
+from tqdm import tqdm
 
 from tcvc.data import get_val_set
 from tcvc.gif import make_gif
@@ -28,9 +29,16 @@ if __name__ == "__main__":
         default="D:\\code\\demo-style\\data\\content_images\\zeven-bw\\zeven",
         help="The path to the folder that contains the images (frames)",
     )
-    parser.add_argument("--cpu", action="store_true", help="Use CPU instead of CUDA (GPU)")
+    parser.add_argument(
+        "--cpu", action="store_true", help="Use CPU instead of CUDA (GPU)"
+    )
+    parser.add_argument(
+        "--make-gif",
+        dest="make_gif",
+        action="store_true",
+        help="Make a GIF with the output frames",
+    )
     opt = parser.parse_args()
-    print(opt)
 
     val_set = get_val_set(opt.dataset_path)
 
@@ -61,7 +69,7 @@ if __name__ == "__main__":
     # previous = Variable(initial,volatile = True).view(1,-1,256,256)
     counter = 0
     with torch.no_grad():
-        for batch in val_data_loader:
+        for batch in tqdm(val_data_loader):
             input_image, target, prev_frame = (
                 Variable(batch[0], volatile=True),
                 Variable(batch[1], volatile=True),
@@ -79,7 +87,8 @@ if __name__ == "__main__":
 
             image_name = "frame{}.png".format(str(counter).zfill(5))
             save_image(out, os.path.join(result_dir, image_name))
-            print("saving:" + image_name)
             counter += 1
 
-    make_gif(result_dir)
+    if opt.make_gif:
+        print("\nMaking gif...")
+        make_gif(result_dir)

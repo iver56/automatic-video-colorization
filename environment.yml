@@ -15,3 +15,4 @@ dependencies:
   - black
   - Pillow>=5.1,<=6
   - torchvision==0.2
+  - tqdm
