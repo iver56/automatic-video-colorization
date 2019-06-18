@@ -1,0 +1,46 @@
+# Python CircleCI 2.1 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-python/ for more details
+#
+version: 2.1
+orbs:
+  codecov: codecov/codecov@1.0.4
+jobs:
+  build:
+    docker:
+      - image: continuumio/miniconda3
+    working_directory: ~/repo
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "environment.yml" }}
+            # Fall back to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run:
+          name: install dependencies
+          command: |
+            conda env list --json | grep "envs/tcvc" || conda env create
+            conda env update
+            source activate tcvc
+      - save_cache:
+          paths:
+            - /opt/conda/envs/tcvc
+          key: v1-dependencies-{{ checksum "environment.yml" }}
+
+      # Run tests and measure code coverage
+      - run:
+          name: run tests
+          command: |
+            source activate tcvc
+            pytest
+
+      - store_artifacts:
+          path: test-reports
+          destination: test-reports
+
+      - codecov/upload:
+          file: coverage.xml
