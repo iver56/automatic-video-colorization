@@ -1,25 +1,25 @@
 import re
 from os import listdir
-from os.path import join, exists
+from os.path import join
 from pathlib import Path
 
 import numpy as np
-import torch.utils.data as data
-import torchvision.transforms as transforms
 from PIL import Image
 from skimage import feature, color, util
+from torch.utils.data import Dataset
+from torchvision.transforms import ToTensor, Compose
 
 from tcvc.util import is_image_file, load_img
 
 
-class DatasetFromFolder(data.Dataset):
+class DatasetFromFolder(Dataset):
     def __init__(self, image_dir, use_line_art=True):
         super(DatasetFromFolder, self).__init__()
         self.use_line_art = use_line_art
         self.photo_path = image_dir
         self.image_filenames = [x for x in listdir(self.photo_path) if is_image_file(x)]
-        transform_list = [transforms.ToTensor()]
-        self.transform = transforms.Compose(transform_list)
+        transform_list = [ToTensor()]
+        self.transform = Compose(transform_list)
 
     @staticmethod
     def get_frame_number(filename):

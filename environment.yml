@@ -14,5 +14,6 @@ dependencies:
 - pip:
   - black
   - Pillow>=5.1,<=6
+  - pytest==4.6
   - torchvision==0.2
   - tqdm
