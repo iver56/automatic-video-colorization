@@ -14,9 +14,7 @@ from tcvc.gif import make_gif
 from tcvc.othernetworks import InpaintGenerator
 
 if __name__ == "__main__":
-    # Testing settings
     parser = argparse.ArgumentParser(description="pix2pix-PyTorch-implementation")
-    parser.add_argument("--dataset", required=True, help="facades")
     parser.add_argument(
         "--model",
         type=str,
@@ -27,14 +25,14 @@ if __name__ == "__main__":
         "--dataset-path",
         dest="dataset_path",
         type=str,
-        default="D:\\code\\demo-style\\data\\content_images\\zeven-bw",
-        help="The path to the root folder of the dataset",
+        default="D:\\code\\demo-style\\data\\content_images\\zeven-bw\\zeven",
+        help="The path to the folder that contains the images (frames)",
     )
-    parser.add_argument("--cuda", action="store_true", help="use cuda")
+    parser.add_argument("--cpu", action="store_true", help="Use CPU instead of CUDA (GPU)")
     opt = parser.parse_args()
     print(opt)
 
-    val_set = get_val_set(os.path.join(opt.dataset_path, opt.dataset))
+    val_set = get_val_set(opt.dataset_path)
 
     seq_sampler = SequentialSampler(val_set)
 
@@ -54,6 +52,9 @@ if __name__ == "__main__":
 
     transform = transforms.Compose(transform_list)
 
+    result_dir = os.path.join(opt.dataset_path, "colored")
+    os.makedirs(result_dir, exist_ok=True)
+
     # first previous frame needs to be zero image
     # initial = Image.new("RGB",[256,256])
     # initial = transform(initial)
@@ -66,24 +67,19 @@ if __name__ == "__main__":
                 Variable(batch[1], volatile=True),
                 Variable(batch[2], volatile=True),
             )
-            if opt.cuda:
+            if not opt.cpu:
                 input_image = input_image.cuda()
                 target = target.cuda()
                 prev_frame = prev_frame.cuda()
             if counter != 0:
                 prev_frame = tmp
-                print("success")
             pred_input = torch.cat((input_image, prev_frame), 1)
             out = netG(pred_input)
             tmp = out
-            # out = postprocess(out)
-            if not os.path.exists(os.path.join("result", opt.dataset)):
-                os.makedirs(os.path.join("result", opt.dataset))
-            # save_img(out_img, "result/{}/{}".format(opt.dataset, image_name))
-            image_name = opt.dataset + "_" + str(counter).zfill(5) + ".jpg"
-            save_image(out, "result/{}/{}".format(opt.dataset, image_name))
+
+            image_name = "frame{}.png".format(str(counter).zfill(5))
+            save_image(out, os.path.join(result_dir, image_name))
             print("saving:" + image_name)
-            # imsave(out,"result/{}/{}".format(opt.dataset, image_name))
             counter += 1
 
-    make_gif("result/{}".format(opt.dataset))
+    make_gif(result_dir)
