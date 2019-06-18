@@ -15,22 +15,8 @@ def weights_init(m):
         m.bias.data.fill_(0)
 
 
-"""
-def get_norm_layer(norm_type):
-    if norm_type == 'batch':
-        norm_layer = nn.BatchNorm2d
-    elif norm_type == 'instance':
-        norm_layer = nn.InstanceNorm2d
-    else:
-        print('normalization layer [%s] is not found' % norm_type)
-    return norm_layer
-"""
-
-
 def define_G(input_nc, output_nc, ngf, use_dropout=True, gpu_ids=[]):
-    netG = None
     use_gpu = len(gpu_ids) > 0
-    # norm_layer = get_norm_layer(norm_type=norm)
 
     if use_gpu:
         assert torch.cuda.is_available()
@@ -45,9 +31,7 @@ def define_G(input_nc, output_nc, ngf, use_dropout=True, gpu_ids=[]):
 
 
 def define_D(input_nc, ndf, use_sigmoid=True, gpu_ids=[]):
-    netD = None
     use_gpu = len(gpu_ids) > 0
-    # norm_layer = get_norm_layer(norm_type=norm)
 
     if use_gpu:
         assert torch.cuda.is_available()
@@ -89,7 +73,6 @@ class GANLoss(nn.Module):
             self.loss = nn.BCEWithLogitsLoss()
 
     def get_target_tensor(self, input_image, target_is_real):
-        target_tensor = None
         if target_is_real:
             create_label = (self.real_label_var is None) or (
                 self.real_label_var.numel() != input_image.numel()
