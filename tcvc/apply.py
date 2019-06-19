@@ -5,7 +5,6 @@ import os
 
 import torch
 import torchvision.transforms as transforms
-from torch.autograd import Variable
 from torch.utils.data import DataLoader, SequentialSampler
 from torchvision.utils import save_image
 from tqdm import tqdm
@@ -70,11 +69,7 @@ if __name__ == "__main__":
     counter = 0
     with torch.no_grad():
         for batch in tqdm(val_data_loader):
-            input_image, target, prev_frame = (
-                Variable(batch[0], volatile=True),
-                Variable(batch[1], volatile=True),
-                Variable(batch[2], volatile=True),
-            )
+            input_image, target, prev_frame = (batch[0], batch[1], batch[2])
             if not opt.cpu:
                 input_image = input_image.cuda()
                 target = target.cuda()
