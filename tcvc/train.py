@@ -30,6 +30,14 @@ if __name__ == "__main__":
         required=True,
         help="Path to a folder that contains the training set (image frames)",
     )
+    parser.add_argument(
+        "--input-style",
+        dest="input_style",
+        type=str,
+        choices=["line_art", "greyscale"],
+        help="line_art (canny edge detection) or greyscale",
+        default="line_art",
+    )
     parser.add_argument("--logfile", required=False, default="training_logs.dat")
     parser.add_argument("--checkpoint", required=False, help="load pre-trained?")
     parser.add_argument("--batchSize", type=int, default=8, help="training batch size")
@@ -57,14 +65,6 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--cpu", action="store_true", help="Use CPU instead of CUDA (GPU)"
-    )
-    parser.add_argument(
-        "--input-style",
-        dest="input_style",
-        type=str,
-        choices=["line_art", "greyscale"],
-        help="line_art (canny edge detection) or greyscale",
-        default="line_art",
     )
     parser.add_argument(
         "--threads",
