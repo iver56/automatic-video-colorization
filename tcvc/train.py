@@ -303,8 +303,7 @@ if __name__ == "__main__":
             target = postprocess(target)
         img = stitch_images(input_image, target, prediction)
         samples_dir = join(opt.dataset, "samples")
-        if not os.path.exists(samples_dir):
-            os.makedirs(samples_dir)
+        os.makedirs(samples_dir, exist_ok=True)
 
         sample = opt.dataset + "_" + str(epoch) + "_" + str(iteration).zfill(5) + ".png"
         print("\nsaving sample " + sample + " - learning rate: " + str(opt.lr))
@@ -328,8 +327,7 @@ if __name__ == "__main__":
 
     def log_train_data(loginfo):
         log_dir = join(opt.dataset, "/logs")
-        if not os.path.exists(log_dir):
-            os.makedirs(log_dir)
+        os.makedirs(log_dir, exist_ok=True)
         log_file = log_dir + "/" + opt.logfile
         with open(log_file, "a") as f:
             f.write("%s\n" % " ".join([str(item[1]) for item in loginfo]))
