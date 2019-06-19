@@ -309,14 +309,6 @@ if __name__ == "__main__":
         print("\nsaving sample " + sample + " - learning rate: " + str(opt.lr))
         img.save(os.path.join(samples_dir, sample))
 
-    """
-    def get_conditions_dis(G_prev, temp = None):
-        if temp == None:
-            return G_prev
-        else:
-            return temp
-    """
-
     def load(checkpoint_path, netG, netD, optimizerG, optimizerD):
         ckpt = torch.load(checkpoint_path)
         netG.load_state_dict(ckpt["netG_state_dict"])
