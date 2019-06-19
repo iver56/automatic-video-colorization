@@ -305,9 +305,9 @@ if __name__ == "__main__":
         samples_dir = join(opt.dataset, "samples")
         os.makedirs(samples_dir, exist_ok=True)
 
-        sample = opt.dataset + "_" + str(epoch) + "_" + str(iteration).zfill(5) + ".png"
-        print("\nsaving sample " + sample + " - learning rate: " + str(opt.lr))
-        img.save(os.path.join(samples_dir, sample))
+        sample_filename = str(epoch) + "_" + str(iteration).zfill(5) + ".png"
+        print("\nsaving sample " + sample_filename + " - learning rate: " + str(opt.lr))
+        img.save(os.path.join(samples_dir, sample_filename))
 
     def load(checkpoint_path, netG, netD, optimizerG, optimizerD):
         ckpt = torch.load(checkpoint_path)
