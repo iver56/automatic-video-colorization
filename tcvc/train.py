@@ -189,10 +189,9 @@ if __name__ == "__main__":
             loss_d_fake = criterionGAN(pred_fake, False, True)
 
             # train with real
-            smoothing = 0.9  # one sided label smoothing?
             real_ab = torch.cat((real_a, prev_b, real_b), 1)
             pred_real = netD.forward(real_ab)
-            loss_d_real = criterionGAN(pred_real, True, True)  # *smoothing
+            loss_d_real = criterionGAN(pred_real, True, True)
 
             # Combined loss
             loss_d = (loss_d_fake + loss_d_real) * 0.5
