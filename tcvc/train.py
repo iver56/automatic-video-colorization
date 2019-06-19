@@ -30,7 +30,7 @@ if __name__ == "__main__":
         required=True,
         help="Path to a folder that contains the training set (image frames)",
     )
-    parser.add_argument("--logfile", required=False, help="training_logs.dat")
+    parser.add_argument("--logfile", required=False, default="training_logs.dat")
     parser.add_argument("--checkpoint", required=False, help="load pre-trained?")
     parser.add_argument("--batchSize", type=int, default=8, help="training batch size")
     parser.add_argument(
