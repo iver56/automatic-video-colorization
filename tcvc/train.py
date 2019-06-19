@@ -37,7 +37,7 @@ if __name__ == "__main__":
         "--testBatchSize", type=int, default=1, help="testing batch size"
     )
     parser.add_argument(
-        "--nEpochs", type=int, default=50, help="number of epochs to train for"
+        "--nEpochs", type=int, default=32, help="number of epochs to train for"
     )
     parser.add_argument("--input_nc", type=int, default=1, help="input image channels")
     parser.add_argument(
@@ -349,11 +349,11 @@ if __name__ == "__main__":
             os.mkdir("checkpoint")
         if not os.path.exists(os.path.join("checkpoint", opt.dataset)):
             os.mkdir(os.path.join("checkpoint", opt.dataset))
-        net_g_model_out_path = "checkpoint/{}/netG_LA2_weights_epoch_{}.pth".format(
-            opt.dataset, epoch
+        net_g_model_out_path = os.path.join(
+            opt.dataset, "checkpoint", "netG_LA2_weights_epoch_{}.pth".format(epoch)
         )
-        net_d_model_out_path = "checkpoint/{}/netD_LA2_weights_epoch_{}.pth".format(
-            opt.dataset, epoch
+        net_d_model_out_path = os.path.join(
+            opt.dataset, "checkpoint", "netD_LA2_weights_epoch_{}.pth".format(epoch)
         )
         torch.save({"generator": netG.state_dict()}, net_g_model_out_path)
         torch.save({"discriminator": netD.state_dict()}, net_d_model_out_path)
