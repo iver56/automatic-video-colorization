@@ -12,7 +12,7 @@ import torch.optim as optim
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
 
-from tcvc.data import get_training_set, get_test_set, create_iterator
+from tcvc.data import create_iterator, get_dataset
 from tcvc.loss import AdversarialLoss, StyleLoss, PerceptualLoss
 from tcvc.networks import define_G, define_D, print_network
 from tcvc.util import stitch_images, postprocess
@@ -21,9 +21,16 @@ if __name__ == "__main__":
     os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
     # Training settings
-    parser = argparse.ArgumentParser(description="pix2pix-PyTorch-implementation")
-    parser.add_argument("--dataset", required=True, help="facades")
-    parser.add_argument("--logfile", required=False, help="trainlogs.dat")
+    parser = argparse.ArgumentParser(
+        description="Training script for Automatic Temporally Coherent Video Colorization"
+    )
+    parser.add_argument(
+        "--dataset-path",
+        dest="dataset",
+        required=True,
+        help="Path to a folder that contains the training set (image frames)",
+    )
+    parser.add_argument("--logfile", required=False, help="training_logs.dat")
     parser.add_argument("--checkpoint", required=False, help="load pre-trained?")
     parser.add_argument("--batchSize", type=int, default=16, help="training batch size")
     parser.add_argument(
@@ -44,11 +51,21 @@ if __name__ == "__main__":
     )  # increasing filters in discriminator made slight diff (not used with inpaint generator)
     parser.add_argument(
         "--lr", type=float, default=0.0001, help="Learning Rate. Default=0.0001"
-    )  # smaller lr 0.0001 instead of 0.0003
+    )
     parser.add_argument(
         "--beta1", type=float, default=0, help="beta1 for adam. default=0"
     )
-    parser.add_argument("--cuda", action="store_true", help="use cuda?")
+    parser.add_argument(
+        "--cpu", action="store_true", help="Use CPU instead of CUDA (GPU)"
+    )
+    parser.add_argument(
+        "--input-style",
+        dest="input_style",
+        type=str,
+        choices=["line_art", "greyscale"],
+        help="line_art (canny edge detection) or greyscale",
+        default="line_art",
+    )
     parser.add_argument(
         "--threads",
         type=int,
@@ -77,19 +94,19 @@ if __name__ == "__main__":
 
     print(opt)
 
-    if opt.cuda and not torch.cuda.is_available():
+    if not opt.cpu and not torch.cuda.is_available():
         raise Exception("No GPU found, please run without --cuda")
 
     cudnn.benchmark = True
 
     torch.manual_seed(opt.seed)
-    if opt.cuda:
+    if not opt.cpu:
         torch.cuda.manual_seed(opt.seed)
 
     print("===> Loading datasets")
-    root_path = "/home/paperspace/Desktop/Temporal-Anime"
-    train_set = get_training_set(join(root_path, opt.dataset))
-    test_set = get_test_set(join(root_path, opt.dataset))
+    train_set = get_dataset(opt.dataset, use_line_art=opt.input_style == "line_art")
+    # TODO: Add a separate argument for test set path. Do not use the same paths for training and testing
+    test_set = get_dataset(opt.dataset, use_line_art=opt.input_style == "line_art")
 
     training_data_loader = DataLoader(
         dataset=train_set,
@@ -146,7 +163,7 @@ if __name__ == "__main__":
     real_b = torch.FloatTensor(opt.batchSize, opt.output_nc, 256, 256)
     prev_b = torch.FloatTensor(opt.batchSize, opt.output_nc, 256, 256)
 
-    if opt.cuda:
+    if not opt.cpu:
         netD = netD.cuda()
         netG = netG.cuda()
         criterionGAN = criterionGAN.cuda()
@@ -200,7 +217,8 @@ if __name__ == "__main__":
 
             loss_d.backward()
 
-            # Only update Dis parameters every 12 iterations give Gen a chance to learn (still not quite right)
+            # Only update Dis parameters every 12 iterations give Gen a chance to learn (still
+            # not quite right)
             # Stop Discriminator if loss less than 0.5
             if iteration == 1 or iteration % 12 == 0:
                 optimizerD.step()
@@ -253,7 +271,9 @@ if __name__ == "__main__":
                 sample(iteration)
 
             print(
-                "===> Epoch[{}]({}/{}): Loss_D: {:.4f} Loss_G: {:.4f} LossD_Fake: {:.4f} LossD_Real: {:.4f}  LossG_Adv: {:.4f} LossG_L1: {:.4f} LossG_Style {:.4f} LossG_Content {:.4f}".format(
+                "===> Epoch[{}]({}/{}): Loss_D: {:.4f} Loss_G: {:.4f} LossD_Fake: {:.4f}"
+                " LossD_Real: {:.4f}  LossG_Adv: {:.4f} LossG_L1: {:.4f} LossG_Style {:.4f}"
+                " LossG_Content {:.4f}".format(
                     epoch,
                     iteration,
                     len(training_data_loader),
@@ -272,7 +292,7 @@ if __name__ == "__main__":
         with torch.no_grad():
             input_image, target, prev_frame = next(sample_iterator)
             # input_image = Variable(input_image, requires_grad = False)
-            if opt.cuda:
+            if not opt.cpu:
                 input_image = input_image.cuda()
                 target = target.cuda()
                 prev_frame = prev_frame.cuda()
@@ -282,7 +302,7 @@ if __name__ == "__main__":
             input_image = postprocess(input_image)
             target = postprocess(target)
         img = stitch_images(input_image, target, prediction)
-        samples_dir = root_path + "/samples_Temporal_LA2"
+        samples_dir = join(opt.dataset, "samples")
         if not os.path.exists(samples_dir):
             os.makedirs(samples_dir)
 
@@ -307,7 +327,7 @@ if __name__ == "__main__":
         return netG, netD, optimizerG, optimizerD
 
     def log_train_data(loginfo):
-        log_dir = root_path + "/logs_Temporal"
+        log_dir = join(opt.dataset, "/logs")
         if not os.path.exists(log_dir):
             os.makedirs(log_dir)
         log_file = log_dir + "/" + opt.logfile
@@ -322,7 +342,7 @@ if __name__ == "__main__":
                 Variable(batch[1], volatile=True),
                 Variable(batch[2], volatile=True),
             )
-            if opt.cuda:
+            if not opt.cpu:
                 input_image = input_image.cuda()
                 target = target.cuda()
                 prev_frame = prev_frame.cuda()
@@ -345,18 +365,8 @@ if __name__ == "__main__":
         net_d_model_out_path = "checkpoint/{}/netD_LA2_weights_epoch_{}.pth".format(
             opt.dataset, epoch
         )
-        # model_out_path = "checkpoint/{}/net_model_epoch_{}.pth".format(opt.dataset+"_temp_LA", epoch)
         torch.save({"generator": netG.state_dict()}, net_g_model_out_path)
         torch.save({"discriminator": netD.state_dict()}, net_d_model_out_path)
-        # torch.save(netD, net_d_model_out_path)
-        """
-        torch.save({'netG_state_dict': netG.state_dict(),
-                    'netD_state_dict': netD.state_dict(),
-                    'optimizerG_state_dict': optimizerG.state_dict(),
-                    'optimizerD_state_dict': optimizerD.state_dict(),
-                    'epoch': epoch,
-                    },model_out_path)
-        """
         print("Checkpoint saved to {}".format("checkpoint" + opt.dataset))
 
     for epoch in range(1, opt.nEpochs + 1):

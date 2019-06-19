@@ -5,22 +5,10 @@ from torch.utils.data import DataLoader
 from tcvc.dataset import DatasetFromFolder
 
 
-def get_training_set(root_dir):
-    train_dir = join(root_dir, "Train")
-
-    return DatasetFromFolder(train_dir)
-
-
-def get_test_set(root_dir):
-    test_dir = join(root_dir, "Test")
-
-    return DatasetFromFolder(test_dir)
-
-
-def get_val_set(root_dir):
+def get_dataset(root_dir, use_line_art=True):
     val_dir = join(root_dir)
 
-    return DatasetFromFolder(val_dir)
+    return DatasetFromFolder(val_dir, use_line_art)
 
 
 def create_iterator(sample_size, sample_dataset):

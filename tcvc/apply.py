@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader, SequentialSampler
 from torchvision.utils import save_image
 from tqdm import tqdm
 
-from tcvc.data import get_val_set
+from tcvc.data import get_dataset
 from tcvc.gif import make_gif
 from tcvc.othernetworks import InpaintGenerator
 
@@ -39,7 +39,7 @@ if __name__ == "__main__":
     )
     opt = parser.parse_args()
 
-    val_set = get_val_set(opt.input_path)
+    val_set = get_dataset(opt.input_path)
 
     seq_sampler = SequentialSampler(val_set)
 
