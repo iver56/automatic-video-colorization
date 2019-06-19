@@ -355,7 +355,7 @@ if __name__ == "__main__":
         )
         torch.save({"generator": netG.state_dict()}, net_g_model_out_path)
         torch.save({"discriminator": netD.state_dict()}, net_d_model_out_path)
-        print("Checkpoint saved to {}".format("checkpoint" + opt.dataset))
+        print("Checkpoint saved to {}".format(checkpoint_folder))
 
     for epoch in range(1, opt.nEpochs + 1):
         train(epoch)
