@@ -110,6 +110,7 @@ if __name__ == "__main__":
     netG = define_G(opt.input_nc, opt.output_nc, opt.ngf, False, [0])
     netD = define_D(opt.input_nc + opt.output_nc, opt.ndf, False, [0])
 
+    """
     checkpoint_G = torch.load(
         "/home/paperspace/Desktop/Temporal-Anime/pix2pix-temporal/checkpoint/Temporal/netG_GS_weights_epoch_23.pth"
     )
@@ -118,6 +119,7 @@ if __name__ == "__main__":
     )
     netG.load_state_dict(checkpoint_G["generator"])
     netD.load_state_dict(checkpoint_D["discriminator"])
+    """
 
     # criterionGAN = GANLoss()
     criterionGAN = AdversarialLoss()
@@ -149,7 +151,7 @@ if __name__ == "__main__":
         netG = netG.cuda()
         criterionGAN = criterionGAN.cuda()
         criterionL1 = criterionL1.cuda()
-        critertionSTYLE = criterionSTYLE.cuda()
+        criterionSTYLE = criterionSTYLE.cuda()
         criterionCONTENT = criterionCONTENT.cuda()
         criterionMSE = criterionMSE.cuda()
         real_a = real_a.cuda()
