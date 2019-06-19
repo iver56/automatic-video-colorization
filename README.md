@@ -8,13 +8,13 @@
 
 ## Train a model on a folder of PNG frames
 
-`python -m tcvc.train --dataset-path /path/to/images/ --input-style line-art`
+`python -m tcvc.train --dataset-path /path/to/images/ --input-style line_art`
 
 Note: The frame filenames should have zero-padded frame numbers, for example like this: frame00001.png, frame00002.png, frame00003.png, ...
 
 ## Apply video colorization to a folder of PNG frames
 
-`python -m tcvc.apply --input-path /path/to/images/`
+`python -m tcvc.apply --input-path /path/to/images/ --input-style line_art`
 
 ## Run tests
 

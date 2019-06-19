@@ -29,6 +29,14 @@ if __name__ == "__main__":
         help="The path to the folder that contains the images (frames)",
     )
     parser.add_argument(
+        "--input-style",
+        dest="input_style",
+        type=str,
+        choices=["line_art", "greyscale"],
+        help="line_art (canny edge detection) or greyscale",
+        default="line_art",
+    )
+    parser.add_argument(
         "--cpu", action="store_true", help="Use CPU instead of CUDA (GPU)"
     )
     parser.add_argument(
@@ -39,7 +47,7 @@ if __name__ == "__main__":
     )
     opt = parser.parse_args()
 
-    val_set = get_dataset(opt.input_path)
+    val_set = get_dataset(opt.input_path, use_line_art=opt.input_style == "line_art")
 
     seq_sampler = SequentialSampler(val_set)
 
