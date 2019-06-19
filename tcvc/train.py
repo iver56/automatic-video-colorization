@@ -345,15 +345,13 @@ if __name__ == "__main__":
         print("===> Avg. PSNR: {:.4f} dB".format(avg_psnr / len(testing_data_loader)))
 
     def checkpoint(epoch):
-        if not os.path.exists("checkpoint"):
-            os.mkdir("checkpoint")
-        if not os.path.exists(os.path.join("checkpoint", opt.dataset)):
-            os.mkdir(os.path.join("checkpoint", opt.dataset))
+        checkpoint_folder = os.path.join(opt.dataset, "checkpoint")
+        os.makedirs(checkpoint_folder, exist_ok=True)
         net_g_model_out_path = os.path.join(
-            opt.dataset, "checkpoint", "netG_LA2_weights_epoch_{}.pth".format(epoch)
+            checkpoint_folder, "netG_LA2_weights_epoch_{}.pth".format(epoch)
         )
         net_d_model_out_path = os.path.join(
-            opt.dataset, "checkpoint", "netD_LA2_weights_epoch_{}.pth".format(epoch)
+            checkpoint_folder, "netD_LA2_weights_epoch_{}.pth".format(epoch)
         )
         torch.save({"generator": netG.state_dict()}, net_g_model_out_path)
         torch.save({"discriminator": netD.state_dict()}, net_d_model_out_path)
