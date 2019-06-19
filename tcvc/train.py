@@ -32,7 +32,7 @@ if __name__ == "__main__":
     )
     parser.add_argument("--logfile", required=False, help="training_logs.dat")
     parser.add_argument("--checkpoint", required=False, help="load pre-trained?")
-    parser.add_argument("--batchSize", type=int, default=16, help="training batch size")
+    parser.add_argument("--batchSize", type=int, default=8, help="training batch size")
     parser.add_argument(
         "--testBatchSize", type=int, default=1, help="testing batch size"
     )
