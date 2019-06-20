@@ -16,6 +16,8 @@ Note: The frame filenames should have zero-padded frame numbers, for example lik
 
 `python -m tcvc.apply --input-path /path/to/images/ --input-style line_art`
 
+By default, this command will use a model that is included in this repository. It is trained on Dragonball line art. If you want to specify a different model, you can do that with `--model`.
+
 ## Run tests
 
 `pytest`
