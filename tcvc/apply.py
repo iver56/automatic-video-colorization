@@ -19,13 +19,13 @@ if __name__ == "__main__":
         "--model",
         type=str,
         default="tcvc/checkpoint/Temporal/netG_weights_epoch_1.pth",
-        help="model file to use",
+        help="Path to the generator model file to use",
     )
     parser.add_argument(
         "--input-path",
         dest="input_path",
         type=str,
-        default="D:\\code\\demo-style\\data\\content_images\\zeven-bw\\zeven",
+        required=True,
         help="The path to the folder that contains the images (frames)",
     )
     parser.add_argument(
@@ -70,10 +70,6 @@ if __name__ == "__main__":
     result_dir = os.path.join(opt.input_path, "colored")
     os.makedirs(result_dir, exist_ok=True)
 
-    # first previous frame needs to be zero image
-    # initial = Image.new("RGB",[256,256])
-    # initial = transform(initial)
-    # previous = Variable(initial,volatile = True).view(1,-1,256,256)
     counter = 0
     with torch.no_grad():
         for batch in tqdm(val_data_loader):
