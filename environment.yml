@@ -12,6 +12,7 @@ dependencies:
 - scipy>=1.0,<1.2
 - pytorch=0.4.1
 - pip:
+  - black
   - Pillow>=5.1,<=6
   - pytest==4.6
   - pytest-cov==2.7.1
