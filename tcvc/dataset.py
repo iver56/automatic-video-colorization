@@ -61,7 +61,7 @@ class DatasetFromFolder(Dataset):
                 # needed for lineart only, not grayscale
                 input_image = feature.canny(input_image, sigma=1)
                 input_image = util.invert(input_image)
-            input_image = Image.fromarray(np.uint8(input_image) * 255)
+            input_image = Image.fromarray((input_image * 255).astype(np.uint8))
             frame_prev = self.transform(frame_prev)
             target = self.transform(target)
             input_image = self.transform(input_image)
