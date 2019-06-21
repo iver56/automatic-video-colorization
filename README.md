@@ -27,3 +27,7 @@ By default, this command will use a model that is included in this repository. I
 Credits go to [Harry-Thasarathan/TCVC](https://github.com/Harry-Thasarathan/TCVC). Changes made to the original can be found in the [commit history](https://github.com/iver56/automatic-video-colorization/commits/master). See also [the licence](https://github.com/iver56/automatic-video-colorization/blob/master/LICENCE.md).
 
 The original paper by Harrish Thasarathan, Kamyar Nazeri and Mehran Ebrahimi (2019) can be read at [https://arxiv.org/abs/1904.09527](https://arxiv.org/abs/1904.09527).
+
+## Known issues
+
+* The code is not compatible with CPU mode as of 2019-06-21
