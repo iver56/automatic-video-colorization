@@ -129,3 +129,6 @@ dmypy.json
 # Output data
 result/*
 
+# Temporary data
+tmp/*
+
