@@ -13,6 +13,7 @@ dependencies:
 - pytorch=0.4.1
 - pip:
   - black
+  - hasel
   - Pillow>=5.1,<=6
   - pytest==4.6
   - pytest-cov==2.7.1

@@ -5,14 +5,16 @@ import os
 
 import numpy as np
 from PIL import Image
-from skimage import img_as_ubyte
-from tqdm import tqdm
+from hasel import rgb2hsl, hsl2rgb
 from skimage.color import rgb2hsv, hsv2rgb
+from tqdm import tqdm
+
 from tcvc.gif import get_file_paths
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="Apply the color of the small 256x256 to the corresponding higher-resolution original greyscale frames"
+        description="Apply the color of the small 256x256 to the corresponding"
+        " higher-resolution original greyscale frames"
     )
     parser.add_argument(
         "--input-path",
@@ -21,6 +23,15 @@ if __name__ == "__main__":
         required=True,
         help="The path to the folder that contains the greyscale images (frames) and a"
         ' subfolder named "colored" where the corresponding colored frames reside',
+    )
+    parser.add_argument(
+        "--via-color-space",
+        dest="via_color_space",
+        type=str,
+        default="hsl",
+        choices=["hsl", "hsv"],
+        help="Transfer hue and saturation from the color image to the greyscale image via HSL"
+        " (Hue, Saturation, Lightness) or HSV (Hue, Saturation, Value)?",
     )
     args = parser.parse_args()
 
@@ -42,15 +53,29 @@ if __name__ == "__main__":
         )
         colored_image_np = np.array(colored_image)
 
-        greyscale_image_np_hsv = rgb2hsv(greyscale_image_np)
-        colored_image_np_hsv = rgb2hsv(colored_image_np)
+        # Transfer hue and saturation from the color image to the greyscale image via the
+        # selected color space
+        if args.via_color_space == "hsl":
+            greyscale_image_np_hsl = rgb2hsl(greyscale_image_np)
+            colored_image_np_hsl = rgb2hsl(colored_image_np)
 
-        # Transfer hue and saturation from the color image to the greyscale image
-        greyscale_image_np_hsv[:, :, 0] = colored_image_np_hsv[:, :, 0]  # hue
-        greyscale_image_np_hsv[:, :, 1] = colored_image_np_hsv[:, :, 1]  # saturation
+            greyscale_image_np_hsl[:, :, 0] = colored_image_np_hsl[:, :, 0]  # hue
+            greyscale_image_np_hsl[:, :, 1] = colored_image_np_hsl[
+                :, :, 1
+            ]  # saturation
 
-        full_res_colored_image = hsv2rgb(greyscale_image_np_hsv)
-        full_res_colored_image = img_as_ubyte(full_res_colored_image)
+            full_res_colored_image = hsl2rgb(greyscale_image_np_hsl)
+        else:
+            greyscale_image_np_hsv = rgb2hsv(greyscale_image_np)
+            colored_image_np_hsv = rgb2hsv(colored_image_np)
+
+            greyscale_image_np_hsv[:, :, 0] = colored_image_np_hsv[:, :, 0]  # hue
+            greyscale_image_np_hsv[:, :, 1] = colored_image_np_hsv[
+                :, :, 1
+            ]  # saturation
+
+            full_res_colored_image = hsv2rgb(greyscale_image_np_hsv)
+            full_res_colored_image = (255 * full_res_colored_image).astype(np.uint8)
 
         Image.fromarray(full_res_colored_image).save(
             os.path.join(output_path, greyscale_file_path.name)
