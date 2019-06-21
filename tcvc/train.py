@@ -127,17 +127,6 @@ if __name__ == "__main__":
     netG = define_G(opt.input_nc, opt.output_nc, opt.ngf, False, [0])
     netD = define_D(opt.input_nc + opt.output_nc, opt.ndf, False, [0])
 
-    """
-    checkpoint_G = torch.load(
-        "/home/paperspace/Desktop/Temporal-Anime/pix2pix-temporal/checkpoint/Temporal/netG_GS_weights_epoch_23.pth"
-    )
-    checkpoint_D = torch.load(
-        "/home/paperspace/Desktop/Temporal-Anime/pix2pix-temporal/checkpoint/Temporal/netD_GS_weights_epoch_23.pth"
-    )
-    netG.load_state_dict(checkpoint_G["generator"])
-    netD.load_state_dict(checkpoint_D["discriminator"])
-    """
-
     # criterionGAN = GANLoss()
     criterionGAN = AdversarialLoss()
     criterionSTYLE = StyleLoss()
@@ -155,9 +144,6 @@ if __name__ == "__main__":
     print_network(netG)
     print_network(netD)
     print("-----------------------------------------------")
-
-    # if opt.load true --> load requirements (before or after cuda)
-    # netG, netD, optimizerG, optimizerD = load(opt.checkpoint, netG, netD, optimizerG, optimizerD)
 
     real_a = torch.FloatTensor(opt.batchSize, opt.input_nc, 256, 256)
     real_b = torch.FloatTensor(opt.batchSize, opt.output_nc, 256, 256)
