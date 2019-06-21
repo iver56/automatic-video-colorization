@@ -3,10 +3,11 @@ from __future__ import print_function
 import argparse
 import os
 
+import numpy as np
 import torch
 import torchvision.transforms as transforms
+from PIL import Image
 from torch.utils.data import DataLoader, SequentialSampler
-from torchvision.utils import save_image
 from tqdm import tqdm
 
 from tcvc.data import get_dataset
@@ -84,8 +85,26 @@ if __name__ == "__main__":
             out = netG(pred_input)
             tmp = out
 
+            if not opt.cpu:
+                # Get image from GPU memory
+                out = out.cpu()
+
+            # Convert the image to a numpy array
+            out_np = out.numpy()[0]
+
+            # Convert the image shape to (height, width, channels)
+            out_np = np.transpose(out_np, (1, 2, 0))
+
+            # Remove black borders
+            out_np = out_np[2:-2, 2:-2, :]
+
+            # Convert the image to the correct data format for saving
+            out_np = (out_np * 255).astype(np.uint8)
+
+            # Save the image
             image_name = "frame{}.png".format(str(counter).zfill(5))
-            save_image(out, os.path.join(result_dir, image_name))
+            Image.fromarray(out_np).save(os.path.join(result_dir, image_name))
+
             counter += 1
 
     if opt.make_gif:
