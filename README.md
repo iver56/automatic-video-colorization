@@ -10,6 +10,11 @@
 
 `python -m tcvc.train --dataset-path /path/to/images/ --input-style line_art`
 
+or
+
+`python -m tcvc.train --dataset-path /path/to/images/ --input-style greyscale`
+
+
 Note: The frame filenames should have zero-padded frame numbers, for example like this: frame00001.png, frame00002.png, frame00003.png, ...
 
 ## Apply video colorization to a folder of PNG frames
