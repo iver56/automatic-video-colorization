@@ -29,6 +29,14 @@ if __name__ == "__main__":
         required=False,
         default=30,
     )
+    arg_parser.add_argument(
+        "--audio-path",
+        dest="audio_path",
+        help="Optional path to a video file that contains the audio you want to apply to the"
+        " output video",
+        type=str,
+        required=False,
+    )
 
     args = arg_parser.parse_args()
 
@@ -59,3 +67,28 @@ if __name__ == "__main__":
             "{}".format(Path(os.path.join(args.input_path, "video.mp4")).as_posix()),
         ]
     )
+
+    if args.audio_path:
+        subprocess.run(
+            [
+                "ffmpeg",
+                "-i",
+                "{}".format(
+                    Path(os.path.join(args.input_path, "video.mp4")).as_posix()
+                ),
+                "-i",
+                "{}".format(Path(os.path.join(args.audio_path)).as_posix()),
+                "-c",
+                "copy",
+                "-map",
+                "0:v:0",
+                "-map",
+                "1:a:0",
+                "-shortest",
+                "{}".format(
+                    Path(
+                        os.path.join(args.input_path, "video_with_audio.mp4")
+                    ).as_posix()
+                ),
+            ]
+        )
