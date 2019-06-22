@@ -1,6 +1,7 @@
 import argparse
 import os
 import subprocess
+import sys
 from pathlib import Path
 
 
@@ -30,7 +31,7 @@ def extract_video_frames(input_path):
         )
 
 
-if __name__ == "__main__":
+def parse_args(args):
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument(
         "--input-path",
@@ -39,6 +40,9 @@ if __name__ == "__main__":
         type=str,
         required=True,
     )
-    args = arg_parser.parse_args()
+    return arg_parser.parse_args(args)
 
+
+if __name__ == "__main__":
+    args = parse_args(sys.argv[1:])
     extract_video_frames(args.input_path)
