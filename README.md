@@ -6,6 +6,8 @@
 
 `conda env create`
 
+Also note that some of the scripts depend on `ffmpeg`.
+
 ## Train a model on a folder of PNG frames
 
 `python -m tcvc.train --dataset-path /path/to/images/ --input-style line_art`
