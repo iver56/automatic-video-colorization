@@ -23,6 +23,8 @@ jobs:
       - run:
           name: install dependencies
           command: |
+            apt-get update
+            apt-get install -y ffmpeg
             conda env list --json | grep "envs/tcvc" || conda env create
             conda env update
             source activate tcvc
