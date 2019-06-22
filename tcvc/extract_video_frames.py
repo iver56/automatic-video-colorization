@@ -3,25 +3,12 @@ import os
 import subprocess
 from pathlib import Path
 
-if __name__ == '__main__':
-    arg_parser = argparse.ArgumentParser()
-    arg_parser.add_argument(
-        "--input-path",
-        dest="input_path",
-        help="Path to an MP4 video file",
-        type=str,
-        required=True,
-    )
-    args = arg_parser.parse_args()
 
-    path = Path(args.input_path)
+def extract_video_frames(input_path):
+    path = Path(input_path)
 
-    frames_dir = os.path.join(
-        path.parent, path.stem + '_frames'
-    )
-    first_image_path = os.path.join(
-        frames_dir, path.stem + "_000001.jpg"
-    )
+    frames_dir = os.path.join(path.parent, path.stem + "_frames")
+    first_image_path = os.path.join(frames_dir, path.stem + "_000001.jpg")
     if os.path.isfile(first_image_path):
         print(
             "\nSkipping frame extraction for {} because frames seem"
@@ -37,9 +24,21 @@ if __name__ == '__main__':
                 "-i",
                 "{}".format(path.as_posix()),
                 "{}".format(
-                    Path(
-                        os.path.join(frames_dir, path.stem + "_%06d.jpg")
-                    ).as_posix()
+                    Path(os.path.join(frames_dir, path.stem + "_%06d.jpg")).as_posix()
                 ),
             ]
         )
+
+
+if __name__ == "__main__":
+    arg_parser = argparse.ArgumentParser()
+    arg_parser.add_argument(
+        "--input-path",
+        dest="input_path",
+        help="Path to an MP4 video file",
+        type=str,
+        required=True,
+    )
+    args = arg_parser.parse_args()
+
+    extract_video_frames(args.input_path)
