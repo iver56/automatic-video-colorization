@@ -229,7 +229,7 @@ class Progbar(object):
         self.update(self._seen_so_far + n, values)
 
 
-def get_image_file_paths(image_root_path):
+def get_image_file_paths(image_root_path, include_subfolders=False):
     """
     Return a list of paths to all image files in a directory (does not check subdirectories).
     """
@@ -245,6 +245,8 @@ def get_image_file_paths(image_root_path):
             if file_extension.lower() in ("png", "jpg", "jpeg"):
                 image_file_paths.append(file_path)
 
-        break  # prevent descending into subfolders
+        if not include_subfolders:
+            # prevent descending into subfolders
+            break
 
     return image_file_paths
