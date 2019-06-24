@@ -19,6 +19,6 @@ dependencies:
   - Pillow>=5.1,<=6
   - pytest==4.6
   - pytest-cov==2.7.1
-  - tensorflow-gpu==1.12
+  - tensorflow-gpu==1.11
   - torchvision==0.2
   - tqdm
