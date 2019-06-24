@@ -102,7 +102,7 @@ class ValGenerator(Sequence):
         print("Loaded {} validation images".format(len(self.data)))
 
     def __len__(self):
-        return self.image_num
+        return len(self.data)
 
     def __getitem__(self, idx):
         return self.data[idx]
