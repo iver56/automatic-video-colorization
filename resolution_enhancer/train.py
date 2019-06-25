@@ -36,11 +36,11 @@ def get_args():
         "--image_size", type=int, default=128, help="training patch size"
     )
     parser.add_argument("--batch_size", type=int, default=8, help="batch size")
-    parser.add_argument("--nb_epochs", type=int, default=12, help="number of epochs")
-    parser.add_argument("--lr", type=float, default=0.01, help="learning rate")
+    parser.add_argument("--nb_epochs", type=int, default=50, help="number of epochs")
+    parser.add_argument("--lr", type=float, default=0.003, help="learning rate")
     parser.add_argument("--steps", type=int, default=1000, help="steps per epoch")
     parser.add_argument(
-        "--loss", type=str, default="mae", help="loss; mse', 'mae', or 'l0' is expected"
+        "--loss", type=str, default="mse", help="loss; mse', 'mae', or 'l0' is expected"
     )
     parser.add_argument(
         "--weight", type=str, default=None, help="weight file for restart"
