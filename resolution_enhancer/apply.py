@@ -1,5 +1,6 @@
 import argparse
 import os
+import shutil
 from pathlib import Path
 
 import cv2
@@ -103,7 +104,14 @@ def main():
         denoised_image = np.clip(pred, 0, 255).astype(np.uint8)
 
         Image.fromarray(denoised_image).save(
-            os.path.join(args.output_dir, Path(image_path).name)
+            os.path.join(
+                args.output_dir,
+                Path(image_path).stem + "_{}_output.png".format(MODEL_ARCHITECTURE),
+            )
+        )
+        shutil.copy(
+            image_path,
+            os.path.join(args.output_dir, Path(image_path).stem + "_input.png"),
         )
 
 
