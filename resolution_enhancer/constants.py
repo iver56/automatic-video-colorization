@@ -1,1 +1,0 @@
-MODEL_ARCHITECTURE = "srresnet"
