@@ -104,11 +104,11 @@ def get_unet_model(
     depth=4,
     inc_rate=2.0,
     activation="relu",
-    dropout=0.5,
+    dropout=0.0,
     batchnorm=False,
     maxpool=True,
     upconv=True,
-    residual=False,
+    residual=True,
 ):
     def _conv_block(m, dim, acti, bn, res, do=0):
         n = Conv2D(dim, 3, activation=acti, padding="same")(m)
