@@ -78,5 +78,5 @@ if __name__ == "__main__":
             full_res_colored_image = (255 * full_res_colored_image).astype(np.uint8)
 
         Image.fromarray(full_res_colored_image).save(
-            os.path.join(output_path, greyscale_file_path.name)
+            os.path.join(output_path, greyscale_file_path.stem + '.jpg'), quality=95
         )
