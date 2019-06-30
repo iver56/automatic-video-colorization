@@ -4,12 +4,13 @@ import time
 
 import numpy as np
 from PIL import Image
-from scipy.misc import imread, imresize
+from imageio import imread
+from skimage.transform import resize
 
 
 def load_img(filepath):
-    img = imread(filepath)
-    img = imresize(img, (256, 256))
+    img = imread(filepath, pilmode="RGB", as_gray=False)
+    img = resize(img, (256, 256), preserve_range=True).astype(np.uint8)
     return img
 
 
