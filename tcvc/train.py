@@ -45,7 +45,7 @@ if __name__ == "__main__":
         "--testBatchSize", type=int, default=1, help="testing batch size"
     )
     parser.add_argument(
-        "--nEpochs", type=int, default=32, help="number of epochs to train for"
+        "--nEpochs", type=int, default=50, help="number of epochs to train for"
     )
     parser.add_argument("--input_nc", type=int, default=1, help="input image channels")
     parser.add_argument(
