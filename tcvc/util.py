@@ -7,10 +7,6 @@ from PIL import Image
 from scipy.misc import imread, imresize
 
 
-def is_image_file(filename):
-    return any(filename.endswith(extension) for extension in [".png", ".jpg", ".jpeg"])
-
-
 def load_img(filepath):
     img = imread(filepath)
     img = imresize(img, (256, 256))

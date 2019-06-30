@@ -1,6 +1,4 @@
 import re
-from os import listdir
-from os.path import join
 from pathlib import Path
 
 import numpy as np
@@ -9,22 +7,23 @@ from skimage import feature, color, util
 from torch.utils.data import Dataset
 from torchvision.transforms import ToTensor, Compose
 
-from tcvc.util import is_image_file, load_img
+from tcvc.util import load_img, get_image_file_paths
 
 
 class DatasetFromFolder(Dataset):
-    def __init__(self, image_dir, use_line_art=True):
+    def __init__(self, image_dir, use_line_art=True, include_subfolders=False):
         super(DatasetFromFolder, self).__init__()
         self.use_line_art = use_line_art
-        self.photo_path = image_dir
-        self.image_filenames = [x for x in listdir(self.photo_path) if is_image_file(x)]
+        self.image_file_paths = get_image_file_paths(
+            image_dir, include_subfolders=include_subfolders
+        )
         transform_list = [ToTensor()]
         self.transform = Compose(transform_list)
 
     @staticmethod
     def get_frame_number(filename):
         filename = Path(filename).name
-        m = re.search(r"\D*(\d{1,7})\.(jpg|png)$", filename)
+        m = re.search(r"\D*(\d{1,7})\.(jpg|jpeg|png)$", filename)
         if m:
             padded_frame_number_as_string = m.group(1)
             frame_number = 0
@@ -41,7 +40,7 @@ class DatasetFromFolder(Dataset):
             file_path.name
         )
         num_digits = len(padded_frame_number_as_string)
-        format_string = '{{:0{}d}}'.format(num_digits)
+        format_string = "{{:0{}d}}".format(num_digits)
         padded_previous_frame_number = format_string.format(frame_number - 1)
         previous_frame_file_path = file_path.with_name(
             file_path.name.replace(
@@ -53,7 +52,7 @@ class DatasetFromFolder(Dataset):
     def __getitem__(self, index):
         """Load the image at the given index."""
         try:
-            target_path = join(self.photo_path, self.image_filenames[index])
+            target_path = self.image_file_paths[index]
             frame_prev = self.get_prev(target_path)  # will be either black or colored
             target = load_img(target_path)
             input_image = color.rgb2gray(target)
@@ -73,7 +72,7 @@ class DatasetFromFolder(Dataset):
             return self[0]
 
     def __len__(self):
-        return len(self.image_filenames)
+        return len(self.image_file_paths)
 
     def get_prev(self, file_path):
         frame_number, _ = self.get_frame_number(file_path)

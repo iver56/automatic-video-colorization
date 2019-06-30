@@ -42,4 +42,13 @@ class TestDatasetFromFolder(unittest.TestCase):
         previous_frame_file_path = DatasetFromFolder.get_previous_frame_file_path(
             file_path
         )
+        self.assertEqual(previous_frame_file_path.parent.name, "zeven")
         self.assertEqual(previous_frame_file_path.name, "frame003.png")
+
+    def test_include_subfolders(self):
+        dataset = DatasetFromFolder(str(TEST_FRAMES_DIR), include_subfolders=True)
+        self.assertEqual(len(dataset), 5)
+        input_image, target, frame_prev = dataset[4]
+        self.assertEqual(type(input_image), Tensor)
+        self.assertEqual(type(target), Tensor)
+        self.assertEqual(type(frame_prev), Tensor)
