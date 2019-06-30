@@ -17,6 +17,7 @@ class DatasetFromFolder(Dataset):
         self.image_file_paths = get_image_file_paths(
             image_dir, include_subfolders=include_subfolders
         )
+        assert len(self.image_file_paths) > 0
         transform_list = [ToTensor()]
         self.transform = Compose(transform_list)
 

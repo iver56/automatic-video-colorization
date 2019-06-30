@@ -24,6 +24,8 @@ The frame filenames should have zero-padded frame numbers, for example like this
 If you have multiple sequences of frames (i.e. from different videos/scenes/shots), you can have different prefixes in the frame filenames, like this:
 * firstvideo00001.png, firstvideo00002.png, firstvideo00003.png, ..., secondvideo00001.png, secondvideo00002.png, secondvideo00003.png, ...
 
+Alternatively, the different frame sequences can reside in different subfolders. For that to work, you have to use the `--include-subfolders` argument.
+
 ## Apply video colorization to a folder of PNG frames
 
 `python -m tcvc.apply --input-path /path/to/images/ --input-style line_art`

@@ -18,7 +18,9 @@ from tcvc.networks import define_G, define_D, print_network
 from tcvc.util import stitch_images, postprocess
 
 if __name__ == "__main__":
-    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+    os.environ[
+        "CUDA_VISIBLE_DEVICES"
+    ] = "0"  # Ensure that we only use one GPU, not multiple
 
     # Training settings
     parser = argparse.ArgumentParser(
@@ -31,12 +33,18 @@ if __name__ == "__main__":
         help="Path to a folder that contains the training set (image frames)",
     )
     parser.add_argument(
+        "--include-subfolders",
+        dest="include_subfolders",
+        action="store_true",
+        help="Include images from subfolders in the specified dataset path.",
+    )
+    parser.add_argument(
         "--input-style",
         dest="input_style",
         type=str,
         choices=["line_art", "greyscale"],
         help="line_art (canny edge detection) or greyscale",
-        default="line_art",
+        default="greyscale",
     )
     parser.add_argument("--logfile", required=False, default="training_logs.dat")
     parser.add_argument("--checkpoint", required=False, help="load pre-trained?")
@@ -104,9 +112,17 @@ if __name__ == "__main__":
         torch.cuda.manual_seed(opt.seed)
 
     print("===> Loading datasets")
-    train_set = get_dataset(opt.dataset, use_line_art=opt.input_style == "line_art")
+    train_set = get_dataset(
+        opt.dataset,
+        use_line_art=opt.input_style == "line_art",
+        include_subfolders=opt.include_subfolders,
+    )
     # TODO: Add a separate argument for test set path. Do not use the same paths for training and testing
-    test_set = get_dataset(opt.dataset, use_line_art=opt.input_style == "line_art")
+    test_set = get_dataset(
+        opt.dataset,
+        use_line_art=opt.input_style == "line_art",
+        include_subfolders=opt.include_subfolders,
+    )
 
     training_data_loader = DataLoader(
         dataset=train_set,

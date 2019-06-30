@@ -3,8 +3,10 @@ from torch.utils.data import DataLoader
 from tcvc.dataset import DatasetFromFolder
 
 
-def get_dataset(root_dir, use_line_art=True):
-    return DatasetFromFolder(root_dir, use_line_art)
+def get_dataset(root_dir, use_line_art=True, include_subfolders=False):
+    return DatasetFromFolder(
+        root_dir, use_line_art, include_subfolders=include_subfolders
+    )
 
 
 def create_iterator(sample_size, sample_dataset):
