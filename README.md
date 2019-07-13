@@ -2,6 +2,10 @@
 
 [![Build status](https://img.shields.io/circleci/project/github/iver56/automatic-video-colorization/master.svg)](https://circleci.com/gh/iver56/automatic-video-colorization) [![Code coverage](https://img.shields.io/codecov/c/github/iver56/automatic-video-colorization/master.svg)](https://codecov.io/gh/iver56/automatic-video-colorization)
 
+![Geometry Gods by JUGZ, original greyscale vs. colorized](demo.gif)
+
+Credits for the example demo above: JUGZ
+
 ## Setup
 
 `conda env create`
