@@ -2,9 +2,9 @@
 
 [![Build status](https://img.shields.io/circleci/project/github/iver56/automatic-video-colorization/master.svg)](https://circleci.com/gh/iver56/automatic-video-colorization) [![Code coverage](https://img.shields.io/codecov/c/github/iver56/automatic-video-colorization/master.svg)](https://codecov.io/gh/iver56/automatic-video-colorization)
 
-![Geometry Gods by JUGZ, original greyscale vs. colorized](demo.gif)
+[![Geometry Gods by JUGZ, original greyscale vs. colorized](demo.gif)](https://www.youtube.com/watch?v=A_xO_jAvyIE)
 
-Credits for the example demo above: JUGZ
+Credits for the example in the gif above: JUGZ
 
 ## Setup
 
