@@ -30,7 +30,11 @@ Alternatively, the different frame sequences can reside in different subfolders.
 
 `python -m tcvc.apply --input-path /path/to/images/ --input-style line_art`
 
-By default, this command will use a model that is included in this repository. It is trained on Dragonball line art. If you want to specify a different model, you can do that with `--model`.
+By default, this command will use a model that is included in this repository. It is trained on Dragonball line art. If you want to specify a different model, you can do that with `--model`. For example, you could try this model that is trained on Ninjadev demos:
+
+https://github.com/iver56/automatic-video-colorization/releases/download/ninjadev/netG_ninjadev_weights_epoch_4.pth
+
+Remember that this model expects you to use `--input-style greyscale`
 
 ## Run tests
 
