@@ -46,6 +46,10 @@ Note: `--input-path` here refers to the path to the folder that contains the gre
 
 Once you have the set of frames you want in a video, you can run `python -m tcvc.convert_images_to_video --framerate 30 --input-path /path/to/frames --audio-path /path/to/original_video_file.mp4` to compile a video file. Alternatively, you can use `ffmpeg` directly.
 
+## But 256x256 is too blurry for me :(
+
+There is some experimental code that uses noise2noise techniques to upscale and refine the 256x256 outputs. See [resolution_enhancer](https://github.com/iver56/automatic-video-colorization/tree/master/resolution_enhancer)
+
 ## Run tests
 
 `pytest`
