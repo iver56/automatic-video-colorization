@@ -28,13 +28,23 @@ Alternatively, the different frame sequences can reside in different subfolders.
 
 ## Apply video colorization to a folder of PNG frames
 
-`python -m tcvc.apply --input-path /path/to/images/ --input-style line_art`
+If you have a video file, not a set of PNG frames, you can run `python -m tcvc.extract_video_frames --input-path /path/to/video.mp4` to extract the frames as a set of images.
+
+Once you have a folder that contains video frames that you want to colorize, run the following command:
+
+`python -m tcvc.apply --input-path /path/to/frames/ --input-style line_art`
 
 By default, this command will use a model that is included in this repository. It is trained on Dragonball line art. If you want to specify a different model, you can do that with `--model`. For example, you could try this model that is trained on Ninjadev demos:
 
 https://github.com/iver56/automatic-video-colorization/releases/download/ninjadev/netG_ninjadev_weights_epoch_4.pth
 
-Remember that this model expects you to use `--input-style greyscale`
+Remember that this model expects you to use `--input-style greyscale`.
+
+`tcvc.apply` will scale your frames to 256x256. In order to apply the color of the small 256x256 frames to the corresponding higher-resolution original greyscale frames, run `python -m tcvc.transfer_colored_frames --input-path /path/to/frames`.
+
+Note: `--input-path` here refers to the path to the folder that contains the greyscale images (frames) and a subfolder named "colored" where the corresponding colored frames reside.
+
+Once you have the set of frames you want in a video, you can run `python -m tcvc.convert_images_to_video --framerate 30 --input-path /path/to/frames --audio-path /path/to/original_video_file.mp4` to compile a video file. Alternatively, you can use `ffmpeg` directly.
 
 ## Run tests
 
