@@ -42,7 +42,7 @@ By default, this command will use a model that is included in this repository. I
 
 https://github.com/iver56/automatic-video-colorization/releases/download/ninjadev/netG_ninjadev_weights_epoch_4.pth
 
-Remember that this model expects you to use `--input-style greyscale`.
+Remember that this Ninjadev demo model expects you to use `--input-style greyscale`.
 
 `tcvc.apply` will scale your frames to 256x256. In order to apply the color of the small 256x256 frames to the corresponding higher-resolution original greyscale frames, run `python -m tcvc.transfer_colored_frames --input-path /path/to/frames`.
 
@@ -52,7 +52,7 @@ Once you have the set of frames you want in a video, you can run `python -m tcvc
 
 ## But 256x256 is too blurry for me :(
 
-There is some experimental code that uses noise2noise techniques to upscale and refine the 256x256 outputs. See [resolution_enhancer](https://github.com/iver56/automatic-video-colorization/tree/master/resolution_enhancer)
+There is some experimental code that uses noise2noise techniques to upscale and refine the colored 256x256 outputs, informed by the high-res greyscale originals. See [resolution_enhancer](https://github.com/iver56/automatic-video-colorization/tree/master/resolution_enhancer)
 
 ## Run tests
 
